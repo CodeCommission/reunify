@@ -16,7 +16,7 @@
   </head>
   <body>
     <div id="app">
-      <%- html %>
+      <div><%- html %></div>
     </div>
     <% if (locals.initialPropsData) { %><script type="application/json" id="initialPropsData"><%- JSON.stringify(locals.initialPropsData) %></script><% } %>
     <script src="bundle.js"></script>

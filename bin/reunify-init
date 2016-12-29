@@ -75,6 +75,7 @@ export default class Index extends React.Component {
 `
 
 const aboutPage = `import React from 'react'
+import { Link } from 'react-router'
 
 export default class About extends React.Component {
   static getInitialProps() {

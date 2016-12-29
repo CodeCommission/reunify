@@ -4,13 +4,23 @@
 
 ## How to use
 
-Install it:
+__Installation:__
+
+```bash
+npm install -g reunify
+mkdir myapp
+reunify init
+npm install
+npm start
+```
+
+__Manual installation:__
 
 ```
-$ mkdir myapp
-$ cd myapp
-$ npm init
-$ npm install reunify --save
+mkdir myapp
+cd myapp
+npm init
+npm install reunify --save
 ```
 
 and add a script to your package.json like this:
@@ -21,6 +31,10 @@ and add a script to your package.json like this:
     "dev": "reunify"
   }
 }
+```
+
+```bash
+npm run dev
 ```
 
 After that, the file-system is the main API. Every `.js` file becomes a route that gets automatically processed and rendered.
