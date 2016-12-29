@@ -1,0 +1,30 @@
+#!/usr/bin/env node
+
+const path = require('path')
+const spawn = require('cross-spawn').spawn
+
+const defaultCommand = 'start'
+const commands = new Set([
+  defaultCommand,
+  'init',
+  'start',
+])
+
+let cmd = process.argv[2]
+let args
+
+if (commands.has(cmd)) {
+  args = process.argv.slice(3)
+} else {
+  cmd = defaultCommand
+  args = process.argv.slice(2)
+}
+
+const bin = path.join(__dirname, `reunify-${cmd}`)
+
+const proc = spawn('node', [bin].concat(args), { stdio: 'inherit', customFds: [0, 1, 2] })
+proc.on('close', (code) => process.exit(code))
+proc.on('error', (err) => {
+  console.error(err)
+  process.exit(1)
+})
