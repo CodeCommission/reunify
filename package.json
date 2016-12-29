@@ -1,8 +1,23 @@
 {
   "name": "reunify",
-  "version": "1.0.0",
+  "version": "2.0.3",
   "description": "A simple framework for server-rendered React applications",
+  "author": "Mike Bild <mike.bild@gmail.com>",
+  "homepage": "https://github.com/reunify/reunify#readme",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reunify/reunify.git"
+  },
+  "bugs": {
+    "url": "https://github.com/reunify/reunify/issues"
+  },
+  "keywords": [
+    "isomorphic",
+    "react",
+    "server",
+    "render"
+  ],
   "bin": {
     "reunify": "./bin/reunify"
   },
