@@ -47,10 +47,9 @@ app.get('*', (req, res) => {
 })
 
 module.exports = function (argv) {
-  var server = {};
-  var port = process.env.SERVICE_PORT || argv.port || 3000;
+  let server = {};
   return {
-    start: function start() {
+    start: function start(port) {
       return new Promise(function (resolve, reject) {
         return server = app.listen(port, function () {
           return resolve(server);
