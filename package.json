@@ -1,6 +1,6 @@
 {
   "name": "reunify",
-  "version": "2.0.7",
+  "version": "2.0.8",
   "description": "A simple framework for server-rendered React applications",
   "author": "Mike Bild <mike.bild@gmail.com>",
   "homepage": "https://github.com/reunify/reunify#readme",

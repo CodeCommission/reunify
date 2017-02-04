@@ -69,7 +69,7 @@ export default class Index extends React.Component {
           <li><Link to={'/about'}>Client-Side Link</Link></li>
         </ul>
         <ul>
-          <li><a href="/about">Server-Side Link</a></li>
+          <li><a href="/about">Server-Side Link (2s delay)</a></li>
         </ul>
       </div>
     )
@@ -97,7 +97,7 @@ export default class About extends React.Component {
           <li><Link to={'/'}>Client-Side Back Link</Link></li>
         </ul>
         <ul>
-          <li><a href="/">Server-Server Back Link (2s delay)</a></li>
+          <li><a href="/">Server-Server Back Link</a></li>
         </ul>
         <h2>Hello from { this.props.mydata }</h2>
       </div>
