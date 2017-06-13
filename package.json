@@ -1,6 +1,6 @@
 {
   "name": "reunify",
-  "version": "3.3.0",
+  "version": "3.3.3",
   "description": "A simple framework for server-rendered React applications",
   "author": "Mike Bild <mike.bild@gmail.com>",
   "homepage": "https://github.com/codecommission/reunify#readme",
