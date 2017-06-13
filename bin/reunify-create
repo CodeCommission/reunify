@@ -11,22 +11,21 @@ const hasYarn = () => Boolean(which('yarn'))
 program
   .arguments('<name>')
   .option('-d, --docker', 'Include dockerfile (mhart/alpine-node)')
-  .option('-n, --node [version]', 'NodeJS 6/7 (mhart/alpine-node)')
+  .option('-n, --node [version]', 'NodeJS 6/7/8 (mhart/alpine-node)')
   .action(name => create({name, docker: program.docker, nodeVersion: program.node}))
   .parse(process.argv)
 
 if(!program.args.length) create({})
 
 function create ({name = '.', docker, nodeVersion = '6'}) {
-  console.log(docker)
   if(!name) {
-    console.error(chalk.red(`Enter a project name.`))
+    console.error(chalk.red('Enter a project name.'))
     process.exit(1)
   }
   const projectDir = path.resolve(process.cwd(), name)
 
   if (path.basename(projectDir) === 'pages') {
-    console.warn(chalk.red('Your root directory is named "pages". This looks suspicious. You probably want to go one directory up.'))
+    console.error(chalk.red('Your root directory is named "pages". This looks suspicious. You probably want to go one directory up.'))
     process.exit(1)
   }
 
@@ -38,8 +37,10 @@ function create ({name = '.', docker, nodeVersion = '6'}) {
     .then(() => docker ? fse.outputFile(path.resolve(projectDir, 'Dockerfile'), createDockerTmpl({name, nodeVersion})) : Promise.resolve())
     .then(() => install({path: projectDir}))
     .then(() => {
-      let message = `${chalk.green(`Reunify ${name} created!\nServe Web-App with:\n\n`)}`
-      message += `${chalk.gray.bold(`reunify serve ${name}`)}`
+      let message = `${chalk.green(`ReactJS Web-App ${name} created!`)}\n\n`
+      message += `Change folder ${chalk.gray.bold(`cd ${name}`)} and serve:\n\n`
+      message += `Development: ${chalk.gray.bold(`npm run dev`)}\n`
+      message += `Production : ${chalk.gray.bold(`npm start`)}`
       console.log(boxen(message, {padding: 1, borderColor: 'gray', margin: 1}))
     })
     .catch(err => {
@@ -58,36 +59,44 @@ function createPackageTmpl ({name, nodeVersion}) {
       "node": "^${nodeVersion}"
     },
     "dependencies": {
-      "reunify": "3.0.0-beta.0"
+      "reunify": "latest"
     },
     "scripts": {
-      "dev" : "reunify serve",
-      "start": "reunify serve --port 80"
+      "dev" : "PORT=3000 reunify serve",
+      "start": "PORT=8080 NODE_ENV=production reunify serve --silent"
     }
   }`
 }
 
 function createDockerTmpl ({name, nodeVersion}) {
   return `FROM mhart/alpine-node:${nodeVersion}
+ENV PORT=80
+ENV NODE_ENV=production
+EXPOSE 80
 LABEL name "${name}"
 RUN mkdir /app
 WORKDIR /app
 COPY package.json /app
 RUN npm install --production
 COPY . /app
-EXPOSE 80
 CMD ["npm", "start"]`
 }
 
 function createIndexPage () {
   return `import React from 'react'
 import { Link } from 'react-router'
+import styled from 'styled-components'
+
+const Title = ({className, text}) => <h1 className={className}>{text}</h1>
+const StyledTitle = styled(Title)\`
+  color: purple;
+\`
 
 export default class Index extends React.Component {
   render() {
     return (
       <div>
-        <h1>Index Page</h1>
+        <StyledTitle text="Index Page" />
         <ul>
           <li><Link to={'/about'}>Client-Side Link</Link></li>
         </ul>
@@ -105,7 +114,7 @@ function createAboutPage () {
 import { Link } from 'react-router'
 
 export default class About extends React.Component {
-  static getInitialProps() {
+  static async getInitialProps() {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve({mydata: 'Reunify!'})

@@ -1,6 +1,6 @@
 {
   "name": "reunify",
-  "version": "3.0.0-beta.0",
+  "version": "3.1.0",
   "description": "A simple framework for server-rendered React applications",
   "author": "Mike Bild <mike.bild@gmail.com>",
   "homepage": "https://github.com/codecommission/reunify#readme",
@@ -25,14 +25,14 @@
     "start": "./bin/reunify",
     "build": "npm run build-client && npm run build-server",
     "build-server": "babel -o ./app.js --presets 'react,es2015,stage-0' routes.js server.js",
-    "build-client": "webpack ./client.js ./static/bundle.js"
+    "build-client": "webpack ./client.js ./static/bundle.js",
+    "prepublish": "npm run build"
   },
   "devDependencies": {
     "eslint": "^4.0.0"
   },
   "dependencies": {
     "babel-cli": "^6.22.2",
-    "babel-core": "^6.22.1",
     "babel-loader": "^6.2.10",
     "babel-plugin-transform-class-properties": "^6.22.0",
     "babel-polyfill": "^6.22.0",

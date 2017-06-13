@@ -1,5 +1,6 @@
 process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0
 require('babel-polyfill')
+require('isomorphic-fetch')
 
 const path = require('path')
 const express = require('express')
@@ -8,7 +9,7 @@ const ReactDOM = require('react-dom/server')
 const ReactRouter = require('react-router')
 const webpack = require('webpack')
 const webpackMiddleware = require('webpack-middleware')
-const {ServerStyleSheet, StyleSheetManager} = require('styled-components')
+const {ServerStyleSheet} = require('styled-components')
 const webpackConfig = require('./webpack.config.js')
 const routes = require('./routes').default
 
@@ -32,14 +33,15 @@ app.get('*', (req, res) => {
         .then(data => {
           const sheet = new ServerStyleSheet()
           const html = ReactDOM.renderToString(
-            <StyleSheetManager sheet={sheet.instance}>
+            sheet.collectStyles(
               <ReactRouter.RouterContext
                 {...renderProps}
                 createElement={(Component, props) => {
                   const componentInitialPropsData = (data.find(x => x.name === Component.name) || {}).componentInitialPropsData
                   return (<Component {...props} {...componentInitialPropsData} />)
-                }} />
-            </StyleSheetManager>
+                }}
+              />
+            )
           )
 
           return res.render('index', {

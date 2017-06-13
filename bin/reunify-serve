@@ -26,7 +26,7 @@ function serve({port = PORT || null, host = '0.0.0.0', silent = false}) {
     .start({port, host})
     .then(({url}) => {
       if (!silent) {
-        let message = `${chalk.green(`Reunify is listing on:\n\n`)}`
+        let message = `${chalk.green('Reunify is listing on:\n\n')}`
         message += `${chalk.gray.bold(`${url}\n\n`)}`
         if (process.stdout.isTTY) {
           write(url)
@@ -36,7 +36,7 @@ function serve({port = PORT || null, host = '0.0.0.0', silent = false}) {
       }
     })
     .catch((err) => {
-      console.error(chalk.red(`An unexpected error occurred.`))
+      console.error(chalk.red('An unexpected error occurred.'))
       console.error(err.stack)
       process.exit(1)
     })

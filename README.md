@@ -8,32 +8,8 @@ __Installation:__
 
 ```bash
 npm install -g reunify
-mkdir myapp
-reunify init
-npm install
-npm start
-```
-
-__Manual installation:__
-
-```
-mkdir myapp
-cd myapp
-npm init
-npm install reunify --save
-```
-
-and add a script to your package.json like this:
-
-```json
-{
-  "scripts": {
-    "dev": "reunify"
-  }
-}
-```
-
-```bash
+reunify create my-app
+cd my-app
 npm run dev
 ```
 

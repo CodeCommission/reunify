@@ -1,8 +1,10 @@
+const NODE_ENV = process.env.NODE_ENV
+const IS_PROD = NODE_ENV === 'production'
 const webpack = require('webpack')
 const path = require('path')
 
-module.exports = {
-  entry: ['babel-polyfill', path.join(__dirname, 'client.js')],
+const config = {
+  entry: ['babel-polyfill', 'isomorphic-fetch', path.join(__dirname, 'client.js')],
   output: { path: '/' },
   module: {
     loaders: [
@@ -19,8 +21,15 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
-        BROWSER: JSON.stringify(true)
+        'BROWSER': JSON.stringify(true),
+        'NODE_ENV': JSON.stringify(process.env.NODE_ENV),
       }
-    })
+    }),
   ],
 }
+config.devtool = IS_PROD ? 'cheap-module-source-map' : 'cheap-module-eval-source-map'
+if(IS_PROD) config.plugins.push(new webpack.optimize.DedupePlugin())
+if(IS_PROD) config.plugins.push(new webpack.optimize.UglifyJsPlugin({mangle: false}))
+if(IS_PROD) config.plugins.push(new webpack.optimize.AggressiveMergingPlugin())
+
+module.exports = config

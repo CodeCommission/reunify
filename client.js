@@ -14,6 +14,6 @@ function handleCreateElement (Component, props) {
   if (!Component.hasOwnProperty('getInitialProps')) return <Component {...props} />
 
   const initialPropsData = JSON.parse(document.getElementById('initialPropsData').textContent)
-  const componentInitialPropsData = (initialPropsData.find(x => x.name === Component.name) || {}).componentInitialPropsData;
+  const componentInitialPropsData = (initialPropsData.find(x => x.name === Component.name) || {}).componentInitialPropsData
   return <Component {...componentInitialPropsData} {...props}/>
 }
