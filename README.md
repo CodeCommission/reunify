@@ -1,6 +1,6 @@
 # Reunify
 
-> A simple framework for server-rendered React applications.
+> A simple framework for server-rendered ReactJS progressive web applications.
 
 ## How to use
 
