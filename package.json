@@ -1,6 +1,6 @@
 {
   "name": "reunify",
-  "version": "3.1.0",
+  "version": "3.1.2",
   "description": "A simple framework for server-rendered React applications",
   "author": "Mike Bild <mike.bild@gmail.com>",
   "homepage": "https://github.com/codecommission/reunify#readme",
@@ -13,7 +13,7 @@
     "url": "https://github.com/codecommission/reunify/issues"
   },
   "keywords": [
-    "isomorphic",
+    "universal",
     "react",
     "server",
     "render"

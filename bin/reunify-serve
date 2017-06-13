@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const PORT = process.env.PORT
+const NODE_ENV = process.env.NODE_ENV
 const program = require('commander')
 const boxen = require('boxen')
 const chalk = require('chalk')
@@ -26,7 +27,7 @@ function serve({port = PORT || null, host = '0.0.0.0', silent = false}) {
     .start({port, host})
     .then(({url}) => {
       if (!silent) {
-        let message = `${chalk.green('Reunify is listing on:\n\n')}`
+        let message = `${chalk.green('Listing (${NODE_ENV}) on:\n\n')}`
         message += `${chalk.gray.bold(`${url}\n\n`)}`
         if (process.stdout.isTTY) {
           write(url)

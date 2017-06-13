@@ -36,9 +36,10 @@ function create ({name = '.', docker, nodeVersion = '6'}) {
     .then(() => fse.outputFile(path.resolve(projectDir, 'pages', 'About.js'), createAboutPage()))
     .then(() => docker ? fse.outputFile(path.resolve(projectDir, 'Dockerfile'), createDockerTmpl({name, nodeVersion})) : Promise.resolve())
     .then(() => install({path: projectDir}))
+    .then(() => cd(path))
     .then(() => {
-      let message = `${chalk.green(`ReactJS Web-App ${name} created!`)}\n\n`
-      message += `Change folder ${chalk.gray.bold(`cd ${name}`)} and serve:\n\n`
+      let message = `${chalk.green(`Universal-App created!`)}\n\n`
+      message += `Serve ${chalk.gray.bold(`${name}`)} with:\n\n`
       message += `Development: ${chalk.gray.bold(`npm run dev`)}\n`
       message += `Production : ${chalk.gray.bold(`npm start`)}`
       console.log(boxen(message, {padding: 1, borderColor: 'gray', margin: 1}))
