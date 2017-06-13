@@ -3,21 +3,28 @@ require('babel-polyfill')
 require('isomorphic-fetch')
 
 const path = require('path')
+const fs = require('fs')
 const express = require('express')
-const React = require('React')
+const React = require('react')
 const ReactDOM = require('react-dom/server')
 const ReactRouter = require('react-router')
 const webpack = require('webpack')
 const webpackMiddleware = require('webpack-middleware')
-const {ServerStyleSheet} = require('styled-components')
 const webpackConfig = require('./webpack.config.js')
+const {ServerStyleSheet} = require('styled-components')
 const routes = require('./routes').default
 
 const app = express()
+app.disable('x-powered-by')
 app.use(webpackMiddleware(webpack(webpackConfig), {noInfo: true, stats: {warnings: false, chunks: false}}))
 app.use(express.static('static'))
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
+
+app.get('/sw.js', (req, res) => {
+  res.setHeader('Content-Type', 'application/javascript')
+  fs.createReadStream(path.join(__dirname, 'sw.js')).pipe(res)
+})
 
 app.get('*', (req, res) => {
   ReactRouter.match({ routes, location: req.url }, (err, redirectLocation, renderProps) => {
@@ -31,6 +38,7 @@ app.get('*', (req, res) => {
 
       Promise.all(promises)
         .then(data => {
+
           const sheet = new ServerStyleSheet()
           const html = ReactDOM.renderToString(
             sheet.collectStyles(
@@ -44,14 +52,15 @@ app.get('*', (req, res) => {
             )
           )
 
-          return res.render('index', {
-            html,
-            css: sheet.getStyleTags(),
-            title: data.title,
-            name: data.name,
-            description: data.description,
-            initialPropsData: data,
-          })
+          return res.render('index', Object.assign(
+            {title: '', description: '', name: ''},
+            data && data[0] && data[0].componentInitialPropsData,
+            {
+              html,
+              css: sheet.getStyleTags(),
+              initialPropsData: data,
+            })
+          )
         })
     } else {
       res.sendStatus(404)

@@ -102,24 +102,31 @@ require('babel-polyfill');
 require('isomorphic-fetch');
 
 var path = require('path');
+var fs = require('fs');
 var express = require('express');
-var React = require('React');
+var React = require('react');
 var ReactDOM = require('react-dom/server');
 var ReactRouter = require('react-router');
 var webpack = require('webpack');
 var webpackMiddleware = require('webpack-middleware');
+var webpackConfig = require('./webpack.config.js');
 
 var _require = require('styled-components'),
     ServerStyleSheet = _require.ServerStyleSheet;
 
-var webpackConfig = require('./webpack.config.js');
 var routes = require('./routes').default;
 
 var app = express();
+app.disable('x-powered-by');
 app.use(webpackMiddleware(webpack(webpackConfig), { noInfo: true, stats: { warnings: false, chunks: false } }));
 app.use(express.static('static'));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+
+app.get('/sw.js', function (req, res) {
+  res.setHeader('Content-Type', 'application/javascript');
+  fs.createReadStream(path.join(__dirname, 'sw.js')).pipe(res);
+});
 
 app.get('*', function (req, res) {
   ReactRouter.match({ routes: routes, location: req.url }, function (err, redirectLocation, renderProps) {
@@ -135,6 +142,7 @@ app.get('*', function (req, res) {
       });
 
       Promise.all(promises).then(function (data) {
+
         var sheet = new ServerStyleSheet();
         var html = ReactDOM.renderToString(sheet.collectStyles(React.createElement(ReactRouter.RouterContext, _extends({}, renderProps, {
           createElement: function createElement(Component, props) {
@@ -145,14 +153,11 @@ app.get('*', function (req, res) {
           }
         }))));
 
-        return res.render('index', {
+        return res.render('index', Object.assign({ title: '', description: '', name: '' }, data && data[0] && data[0].componentInitialPropsData, {
           html: html,
           css: sheet.getStyleTags(),
-          title: data.title,
-          name: data.name,
-          description: data.description,
           initialPropsData: data
-        });
+        }));
       });
     } else {
       res.sendStatus(404);

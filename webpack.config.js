@@ -6,6 +6,9 @@ const path = require('path')
 const config = {
   entry: ['babel-polyfill', 'isomorphic-fetch', path.join(__dirname, 'client.js')],
   output: { path: '/' },
+  stats: {
+    warnings: false
+  },
   module: {
     loaders: [
       {

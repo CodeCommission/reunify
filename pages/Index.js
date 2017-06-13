@@ -7,6 +7,7 @@ const Main = ({className}) => (
     <p>Modify this page with your own content!</p>
   </div>
 )
+
 const StyledMain = styled(Main)`
   border: 1px solid gray;
   padding: 5px;

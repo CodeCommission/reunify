@@ -1,6 +1,6 @@
 {
   "name": "reunify",
-  "version": "3.1.4",
+  "version": "3.1.9",
   "description": "A simple framework for server-rendered React applications",
   "author": "Mike Bild <mike.bild@gmail.com>",
   "homepage": "https://github.com/codecommission/reunify#readme",
@@ -22,7 +22,7 @@
     "reunify": "./bin/reunify"
   },
   "scripts": {
-    "start": "./bin/reunify",
+    "start": "./bin/reunify serve",
     "build": "npm run build-client && npm run build-server",
     "build-server": "babel -o ./app.js --presets 'react,es2015,stage-0' routes.js server.js",
     "build-client": "webpack ./client.js ./static/bundle.js",
