@@ -1,16 +1,16 @@
 {
   "name": "reunify",
-  "version": "2.0.8",
+  "version": "3.0.0-beta.0",
   "description": "A simple framework for server-rendered React applications",
   "author": "Mike Bild <mike.bild@gmail.com>",
-  "homepage": "https://github.com/reunify/reunify#readme",
+  "homepage": "https://github.com/codecommission/reunify#readme",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/reunify/reunify.git"
+    "url": "git+https://github.com/codecommission/reunify.git"
   },
   "bugs": {
-    "url": "https://github.com/reunify/reunify/issues"
+    "url": "https://github.com/codecommission/reunify/issues"
   },
   "keywords": [
     "isomorphic",
@@ -27,7 +27,9 @@
     "build-server": "babel -o ./app.js --presets 'react,es2015,stage-0' routes.js server.js",
     "build-client": "webpack ./client.js ./static/bundle.js"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint": "^4.0.0"
+  },
   "dependencies": {
     "babel-cli": "^6.22.2",
     "babel-core": "^6.22.1",
@@ -38,19 +40,23 @@
     "babel-preset-react": "^6.22.0",
     "babel-preset-stage-0": "^6.22.0",
     "babel-register": "^6.22.0",
+    "boxen": "^1.1.0",
+    "chalk": "^1.1.3",
     "classnames": "^2.2.5",
-    "cross-spawn": "^5.0.1",
+    "clipboardy": "^1.1.2",
+    "commander": "^2.9.0",
     "ejs": "^2.5.5",
     "express": "^4.14.0",
-    "glamor": "^2.20.22",
+    "fs-extra": "^3.0.1",
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.17.4",
-    "minimist": "^1.2.0",
-    "mkdirp-then": "^1.2.0",
-    "mz": "^2.6.0",
+    "node-version": "^1.0.0",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-router": "^3.0.2",
+    "shelljs": "^0.7.8",
+    "styled-components": "^2.0.1",
+    "update-notifier": "^2.2.0",
     "webpack": "^1.14.0",
     "webpack-middleware": "^1.5.1"
   }

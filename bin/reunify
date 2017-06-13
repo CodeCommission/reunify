@@ -1,30 +1,25 @@
 #!/usr/bin/env node
 
 const path = require('path')
-const spawn = require('cross-spawn').spawn
+const program = require('commander')
+const chalk = require('chalk')
+const updateNotifier = require('update-notifier')
+const nodeVersion = require('node-version')
+const pkg = require('../package.json')
 
-const defaultCommand = 'start'
-const commands = new Set([
-  defaultCommand,
-  'init',
-  'start',
-])
+updateNotifier({pkg}).notify()
 
-let cmd = process.argv[2]
-let args
-
-if (commands.has(cmd)) {
-  args = process.argv.slice(3)
-} else {
-  cmd = defaultCommand
-  args = process.argv.slice(2)
+if (nodeVersion.major < 6) {
+  console.error(chalk.red(`Error! Reunify requires at least version 6 of NodeJS. Please upgrade your NodeJS version please.`))
+  process.exit(1)
 }
 
-const bin = path.join(__dirname, `reunify-${cmd}`)
-
-const proc = spawn('node', [bin].concat(args), { stdio: 'inherit', customFds: [0, 1, 2] })
-proc.on('close', (code) => process.exit(code))
-proc.on('error', (err) => {
-  console.error(err)
-  process.exit(1)
+process.on('SIGINT', () => {
+  process.exit(0)
 })
+
+program
+.version(`${pkg.name} v${pkg.version}`)
+.command('create <folder>', 'Creates a Reunify application.')
+.command('serve <folder>', 'Serves a Reunify application.')
+.parse(process.argv)

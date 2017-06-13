@@ -1,0 +1,143 @@
+#!/usr/bin/env node
+
+const path = require('path')
+const fse = require('fs-extra')
+const program = require('commander')
+const boxen = require('boxen')
+const chalk = require('chalk')
+const {cd, exec, which} = require('shelljs')
+const hasYarn = () => Boolean(which('yarn'))
+
+program
+  .arguments('<name>')
+  .option('-d, --docker', 'Include dockerfile (mhart/alpine-node)')
+  .option('-n, --node [version]', 'NodeJS 6/7 (mhart/alpine-node)')
+  .action(name => create({name, docker: program.docker, nodeVersion: program.node}))
+  .parse(process.argv)
+
+if(!program.args.length) create({})
+
+function create ({name = '.', docker, nodeVersion = '6'}) {
+  console.log(docker)
+  if(!name) {
+    console.error(chalk.red(`Enter a project name.`))
+    process.exit(1)
+  }
+  const projectDir = path.resolve(process.cwd(), name)
+
+  if (path.basename(projectDir) === 'pages') {
+    console.warn(chalk.red('Your root directory is named "pages". This looks suspicious. You probably want to go one directory up.'))
+    process.exit(1)
+  }
+
+  fse.ensureDir(projectDir)
+    .then(() => fse.ensureDir(path.resolve(projectDir, 'static')))
+    .then(() => fse.outputFile(path.resolve(projectDir, 'package.json'), createPackageTmpl({name, nodeVersion})))
+    .then(() => fse.outputFile(path.resolve(projectDir, 'pages', 'Index.js'), createIndexPage()))
+    .then(() => fse.outputFile(path.resolve(projectDir, 'pages', 'About.js'), createAboutPage()))
+    .then(() => docker ? fse.outputFile(path.resolve(projectDir, 'Dockerfile'), createDockerTmpl({name, nodeVersion})) : Promise.resolve())
+    .then(() => install({path: projectDir}))
+    .then(() => {
+      let message = `${chalk.green(`Reunify ${name} created!\nServe Web-App with:\n\n`)}`
+      message += `${chalk.gray.bold(`reunify serve ${name}`)}`
+      console.log(boxen(message, {padding: 1, borderColor: 'gray', margin: 1}))
+    })
+    .catch(err => {
+      console.error(chalk.red(`An unexpected error occured. ${err.message}`))
+      process.exit(1)
+    })
+}
+
+function createPackageTmpl ({name, nodeVersion}) {
+  return `{
+    "private": true,
+    "version": "0.0.0",
+    "name": "${name}",
+    "description": "My ReactJS Web-App",
+    "engines": {
+      "node": "^${nodeVersion}"
+    },
+    "dependencies": {
+      "reunify": "3.0.0-beta.0"
+    },
+    "scripts": {
+      "dev" : "reunify serve",
+      "start": "reunify serve --port 80"
+    }
+  }`
+}
+
+function createDockerTmpl ({name, nodeVersion}) {
+  return `FROM mhart/alpine-node:${nodeVersion}
+LABEL name "${name}"
+RUN mkdir /app
+WORKDIR /app
+COPY package.json /app
+RUN npm install --production
+COPY . /app
+EXPOSE 80
+CMD ["npm", "start"]`
+}
+
+function createIndexPage () {
+  return `import React from 'react'
+import { Link } from 'react-router'
+
+export default class Index extends React.Component {
+  render() {
+    return (
+      <div>
+        <h1>Index Page</h1>
+        <ul>
+          <li><Link to={'/about'}>Client-Side Link</Link></li>
+        </ul>
+        <ul>
+          <li><a href="/about">Server-Side Link (2s delay)</a></li>
+        </ul>
+      </div>
+    )
+  }
+}`
+}
+
+function createAboutPage () {
+  return `import React from 'react'
+import { Link } from 'react-router'
+
+export default class About extends React.Component {
+  static getInitialProps() {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve({mydata: 'Reunify!'})
+      }, 2000)
+    })
+  }
+
+  render() {
+    return (
+      <div>
+        <h1>About Page</h1>
+        <ul>
+          <li><Link to={'/'}>Client-Side Back Link</Link></li>
+        </ul>
+        <ul>
+          <li><a href="/">Server-Server Back Link</a></li>
+        </ul>
+        <h2>Hello from { this.props.mydata }</h2>
+      </div>
+    )
+  }
+}`
+}
+
+function install ({path}) {
+  return new Promise((resolve, reject) => {
+    cd(path)
+    const installCmd = hasYarn() ? 'yarn' : 'npm install'
+
+    exec(installCmd, (code, stdout, stderr) => {
+      if (code !== 0) return reject(stderr)
+      resolve()
+    })
+  })
+}
