@@ -36,7 +36,7 @@ function create ({name = '.', docker, nodeVersion = '6'}) {
     .then(() => fse.outputFile(path.resolve(projectDir, 'pages', 'About.js'), createAboutPage()))
     .then(() => docker ? fse.outputFile(path.resolve(projectDir, 'Dockerfile'), createDockerTmpl({name, nodeVersion})) : Promise.resolve())
     .then(() => install({path: projectDir}))
-    .then(() => cd(path))
+    .then(() => cd(projectDir))
     .then(() => {
       let message = `${chalk.green(`Universal-App created!`)}\n\n`
       message += `Serve ${chalk.gray.bold(`${name}`)} with:\n\n`

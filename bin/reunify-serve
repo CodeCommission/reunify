@@ -27,8 +27,8 @@ function serve({port = PORT || null, host = '0.0.0.0', silent = false}) {
     .start({port, host})
     .then(({url}) => {
       if (!silent) {
-        let message = `${chalk.green('Listing (${NODE_ENV}) on:\n\n')}`
-        message += `${chalk.gray.bold(`${url}\n\n`)}`
+        let message = `${chalk.green(`Listing (${NODE_ENV}) on:`)}\n\n`
+        message += `${chalk.gray.bold(`${url}`)}\n\n`
         if (process.stdout.isTTY) {
           write(url)
           message += `${chalk.grey('Address copied to clipboard.')}`
