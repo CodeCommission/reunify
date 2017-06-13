@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const PORT = process.env.PORT
-const NODE_ENV = process.env.NODE_ENV
+const NODE_ENV = process.env.NODE_ENV || 'development'
 const program = require('commander')
 const boxen = require('boxen')
 const chalk = require('chalk')
