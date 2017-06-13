@@ -32,6 +32,8 @@ function create ({name = '.', docker, nodeVersion = '6'}) {
   fse.ensureDir(projectDir)
     .then(() => fse.ensureDir(path.resolve(projectDir, 'static')))
     .then(() => fse.outputFile(path.resolve(projectDir, 'static', 'manifest.json'), createManifestTmpl({name})))
+    .then(() => fse.outputFile(path.resolve(projectDir, 'static', 'asset-manifest.json'), createAssetsManifestTmpl()))
+    .then(() => fse.outputFile(path.resolve(__dirname, 'homescreen.png'), path.resolve(projectDir, 'static', 'homescreen.png')))
     .then(() => fse.outputFile(path.resolve(projectDir, 'pages', 'Index.js'), createIndexPage()))
     .then(() => fse.outputFile(path.resolve(projectDir, 'pages', 'About.js'), createAboutPage()))
     .then(() => fse.outputFile(path.resolve(projectDir, 'package.json'), createPackageTmpl({name, nodeVersion})))
@@ -100,8 +102,6 @@ export default class Index extends React.Component {
         <StyledTitle text="Index Page" />
         <ul>
           <li><Link to={'/about'}>Client-Side Link</Link></li>
-        </ul>
-        <ul>
           <li><a href="/about">Server-Side Link (2s delay)</a></li>
         </ul>
       </div>
@@ -127,25 +127,30 @@ export default class About extends React.Component {
     return (
       <div>
         <h1>About Page</h1>
+        <h2>Data: { this.props.mydata }</h2>
         <ul>
           <li><Link to={'/'}>Client-Side Back Link</Link></li>
-        </ul>
-        <ul>
           <li><a href="/">Server-Server Back Link</a></li>
         </ul>
-        <h2>Hello from { this.props.mydata }</h2>
       </div>
     )
   }
 }`
 }
 
+function createAssetsManifestTmpl () {
+  return `[
+  "/",
+  "/bundle.js",
+  "/homescreen.png"
+]`
+}
+
 function createManifestTmpl ({name}) {
-  return `
-{
+  return `{
   "name": "${name}",
   "short_name": "${name}",
-  "start_url": ".",
+  "start_url": "/?homescreen=1",
   "display": "standalone",
   "theme_color": "aliceblue",
   "background_color": "gray",
@@ -173,6 +178,10 @@ function createManifestTmpl ({name}) {
   }, {
     "src": "homescreen.png",
     "sizes": "192x192",
+    "type": "image/png"
+  }, {
+    "src": "homescreen.png",
+    "sizes": "512x512",
     "type": "image/png"
   }],
   "related_applications": [{

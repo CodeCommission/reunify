@@ -1,4 +1,3 @@
-const doCache = false
 const CACHE_NAME = 'pwa-cache-v1'
 
 self.addEventListener('activate', event => {
@@ -8,7 +7,7 @@ self.addEventListener('activate', event => {
       .then(keyList =>
         Promise.all(keyList.map(key => {
           if (!cacheWhitelist.includes(key)) {
-            console.log('Deleting cache: ' + key)
+            console.log(`Deleting cache: ${key}`)
             return caches.delete(key)
           }
         }))
@@ -17,22 +16,16 @@ self.addEventListener('activate', event => {
 })
 
 self.addEventListener('install', event => {
-  if (!doCache) return
-
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => fetch('asset-manifest.json')
         .then(res => res.json())
-        .then(assets => {
-            const urlsToCache = ['/', assets['main.js']]
-            cache.addAll(urlsToCache)
-            console.log('cached')
-        })
+        .then(assets => cache.addAll(assets))
+        .then(() => console.log('cached'))
       )
   )
 })
 
 self.addEventListener('fetch', function(event) {
-  if (!doCache) return;
   event.respondWith(caches.match(event.request).then(response => response || fetch(event.request)))
 })
