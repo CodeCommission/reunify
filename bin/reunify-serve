@@ -8,7 +8,7 @@ const chalk = require('chalk')
 const { write } = require('clipboardy')
 
 require('babel-register')({
-  only: ['server.js','routes.js', `${process.cwd()}/pages/*`, `pages/*`],
+  only: ['server.js','routes.js', `${process.cwd()}/pages/**/*`, `${process.cwd()}/components/**/*`, `pages/*`],
   presets: ['stage-0', 'es2015', 'react'],
   plugins: ['transform-class-properties'],
 })

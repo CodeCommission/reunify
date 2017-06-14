@@ -40,7 +40,7 @@ function create ({name = '.', docker, nodeVersion = '6'}) {
     .then(() => docker ? fse.outputFile(path.resolve(projectDir, 'Dockerfile'), createDockerTmpl({name, nodeVersion})) : Promise.resolve())
     .then(() => install({path: projectDir}))
     .then(() => {
-      let message = `${chalk.green(`ReactJS Universal-App created!`)}\n\n`
+      let message = `${chalk.green(`Universal ReactJS PWA created!`)}\n\n`
       message += `Serve ${chalk.gray.bold(`${name}`)} with:\n\n`
       message += `Development: ${chalk.gray.bold(`npm run dev`)}\n`
       message += `Production : ${chalk.gray.bold(`npm start`)}`
