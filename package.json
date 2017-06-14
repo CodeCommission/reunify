@@ -1,6 +1,6 @@
 {
   "name": "reunify",
-  "version": "3.3.5",
+  "version": "3.3.6",
   "description": "A simple framework for server-rendered ReactJS progressive web applications.",
   "author": "Mike Bild <mike.bild@gmail.com>",
   "homepage": "https://github.com/codecommission/reunify#readme",
