@@ -6,9 +6,21 @@ const program = require('commander')
 const boxen = require('boxen')
 const chalk = require('chalk')
 const { write } = require('clipboardy')
+const { readdirSync, statSync } = require('fs')
+
+const buildFolder = process.cwd()
+const builds = readdirSync(buildFolder)
+.filter(file => statSync(file).isDirectory())
+.filter(x => x !== '.DS_Store' && x !== 'node_modules' && x !== 'static')
+.map(x => `${buildFolder}/${x}/*`)
+.concat([
+  'server.js',
+  'routes.js',
+  `pages/*`,
+])
 
 require('babel-register')({
-  only: ['server.js','routes.js', `${process.cwd()}/pages/*`, `${process.cwd()}/components/*`, `pages/*`],
+  only: builds,
   presets: ['stage-0', 'es2015', 'react'],
   plugins: ['transform-class-properties'],
 })
