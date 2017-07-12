@@ -1,6 +1,6 @@
 {
   "name": "reunify",
-  "version": "3.3.10",
+  "version": "3.3.13",
   "description": "Simplified creation of universal ReactJS progressive web applications.",
   "author": "Mike Bild <mike@codecommission.com>",
   "homepage": "https://github.com/codecommission/reunify#readme",
@@ -20,6 +20,7 @@
     "progressive",
     "pwa"
   ],
+  "main": "server.js",
   "bin": {
     "reunify": "./bin/reunify"
   },
