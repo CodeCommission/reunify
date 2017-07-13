@@ -5,23 +5,22 @@ import {Route, IndexRoute} from 'react-router'
 
 export default (
   <Route
-    path="/"
+    path='/'
     getComponent={(location, cb) => {
       try {
-        delete require.cache[require.resolve('../../pages/Layout')]
         cb(null, require('../../pages/Layout').default)
       } catch(err) {
-        delete require.cache[require.resolve('./pages/Layout')]
         cb(null, require('./pages/Layout').default)
       }
     }}
     getChildRoutes={(location, cb) => {
       require.ensure([], require => {
-        let pages
-        if (!process.env.BROWSER) { // node context
+        let pages = []
+
+        if (!process.env.BROWSER) {
           const fs = require('fs')
           pages = fs.existsSync('../../pages') ? fs.readdirSync('../../pages') : fs.readdirSync('./pages')
-        } else { // browser context
+        } else {
           try {
             pages = require.context('../../pages', true, /^(.*\.(js$))[^.]*$/igm).keys().map(x => x.replace('./', ''))
           } catch(err) {
@@ -34,14 +33,7 @@ export default (
           .filter(x => x !== 'Index')
           .filter(x => x !== 'Layout')
           .filter(x => x !== 'NotFound')
-          .map(fileName => {
-            try {
-              delete require.cache[require.resolve(`../../pages/${fileName}`)]
-            } catch(err){
-              delete require.cache[require.resolve(`./pages/${fileName}`)]
-            }
-            return fileName
-          })
+          .filter(x => x !== 'Error')
           .map(fileName => ({
             path: fileName.toLowerCase(),
             getComponent: (location, cb) => {
@@ -56,17 +48,15 @@ export default (
           })).concat([{
             path: '*',
             component: require('./pages/NotFound').default,
+            is404: true
           }])
         )
-
       })
     }}>
     <IndexRoute getComponent={(location, cb) => {
       try {
-        delete require.cache[require.resolve('../../pages/Index')]
         cb(null, require('../../pages/Index').default)
       } catch(err) {
-        delete require.cache[require.resolve('./pages/Index')]
         cb(null, require('./pages/Index').default)
       }
     }} />

@@ -18,10 +18,12 @@ function handleCreateElement (Component, props) {
   return <Component {...componentInitialPropsData} {...props}/>
 }
 
-if ('serviceWorker' in navigator) {
+if(process.env.NODE_ENV !== 'production') {
+  console.log('Development environment: ServiceWorker is disabled.')
+} else if (!('serviceWorker' in navigator)) {
+  console.error('ServiceWorker is not supported.')
+} else {
   window.addEventListener('load', () => navigator.serviceWorker.register('sw.js')
   .then(registration => console.log('ServiceWorker registration successful with scope: ', registration.scope), err => console.log('ServiceWorker registration failed: ', err))
   .catch(console.error))
-} else {
-  console.error('ServiceWorker is not supported')
 }

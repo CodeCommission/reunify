@@ -14,7 +14,8 @@
 
     <link rel="icon" href="favicon.png">
     <link rel="apple-touch-icon" href="favicon.png">
-    <link rel="manifest" href="manifest.json">
+
+    <% if (IS_PROD) { %> <link rel="manifest" href="manifest.json"> <% } %>
 
     <%- css %>
   </head>
