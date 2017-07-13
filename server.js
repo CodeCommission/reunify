@@ -97,7 +97,7 @@ function renderError(sheet, error) {
   } catch(err) {
     ErrorComponent = require(`./pages/Error`).default
   }
-  return ReactDOM.renderToString(sheet.collectStyles(<ErrorComponent error={error} env={process.env} />))
+  return ReactDOM.renderToString(sheet.collectStyles(<ErrorComponent error={error} />))
 }
 
 function renderNotFound(sheet) {
@@ -107,7 +107,7 @@ function renderNotFound(sheet) {
   } catch(err) {
     NotFoundComponent = require(`./pages/NotFound`).default
   }
-  return ReactDOM.renderToString(sheet.collectStyles(<NotFoundComponent env={process.env} />))
+  return ReactDOM.renderToString(sheet.collectStyles(<NotFoundComponent />))
 }
 
 module.exports = () => {
