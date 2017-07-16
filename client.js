@@ -11,14 +11,13 @@ match({ routes, location }, () => {
 })
 
 function handleCreateElement (Component, props) {
-  if (!Component.hasOwnProperty('getInitialProps')) return <Component {...props} />
-
-  let initialPropsData = null
   let componentInitialPropsData = {}
   try {
-    initialPropsData = JSON.parse(document.getElementById('initialPropsData').textContent)
-    componentInitialPropsData = (initialPropsData.find(x => x.name === Component.name) || {}).componentInitialPropsData
-  } catch(e) {}
+    const initialPropsData = JSON.parse(document.getElementById('initialPropsData').textContent)
+    componentInitialPropsData = (initialPropsData.find(x => x.name === Component.name || x.name === Component.displayName) || {}).componentInitialPropsData
+  } catch(e) {
+    componentInitialPropsData = {error: e}
+  }
   return <Component {...componentInitialPropsData} {...props}/>
 }
 
