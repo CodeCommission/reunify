@@ -65,6 +65,10 @@ function createPackageTmpl ({name, nodeVersion = 6}) {
       "reunify": "latest"
     },
     "scripts": {
+      "export": "NODE_ENV=production reunify export",
+      "export:dev": "NODE_ENV=production reunify export -d",
+      "export:package": "NODE_ENV=production reunify export -p",
+      "export:package:dev": "NODE_ENV=production reunify export -p -d",
       "dev" : "PORT=8080 NODE_ENV=development reunify serve",
       "start": "PORT=80 NODE_ENV=production reunify serve --silent"
     }
