@@ -52,7 +52,7 @@ function exportApp({package, development}) {
     .then(() => createHtmlTmpl({isProd: !development, name: appConfig.name, description: appConfig.description, title: appConfig.name}))
     .then(data => fse.outputFile(path.resolve(buildsDir, 'index.html'), data))
     .then(() => fse.outputFile(path.resolve(buildsDir, 'asset-manifest.json'), createAssetsManifestTmpl()))
-    .then(() => fse.copy(path.resolve(projectDir, 'sw.js'), path.resolve(buildsDir, 'sw.js')))
+    .then(() => fse.copy(path.resolve('../sw.js'), path.resolve(buildsDir, 'sw.js')))
     .then(() => install({path: buildsDir}))
     .then(() => {
       process.stdout.cursorTo(0)
@@ -91,7 +91,7 @@ function createPackageTmpl ({name, nodeVersion = 6}) {
 }
 
 function createHtmlTmpl ({name, title, description, isProd, css, html}) {
-  const htmlFilePath = path.resolve(path.join(process.cwd(), '/views/index.ejs'));
+  const htmlFilePath = path.resolve('../views/index.ejs');
 
   return fse
   .readFile(htmlFilePath)
