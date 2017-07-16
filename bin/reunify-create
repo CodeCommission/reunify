@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
 const path = require('path')
-const fse = require('fs-extra')
 const program = require('commander')
 const boxen = require('boxen')
 const chalk = require('chalk')
+const fse = require('fs-extra')
 const {cd, exec, which} = require('shelljs')
 const hasYarn = () => Boolean(which('yarn'))
 
@@ -52,12 +52,12 @@ function create ({name = '.', docker, nodeVersion = '6'}) {
     })
 }
 
-function createPackageTmpl ({name, nodeVersion}) {
+function createPackageTmpl ({name, nodeVersion = 6}) {
   return `{
     "private": true,
     "version": "0.0.0",
     "name": "${name}",
-    "description": "My ReactJS Web-App",
+    "description": "My ${name} React-Universal-App",
     "engines": {
       "node": "^${nodeVersion}"
     },

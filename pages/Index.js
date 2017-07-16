@@ -9,7 +9,6 @@ const Main = ({className}) => (
 )
 
 const StyledMain = styled(Main)`
-  border: 1px solid gray;
   padding: 5px;
   height: 100vh;
   width: 100%;

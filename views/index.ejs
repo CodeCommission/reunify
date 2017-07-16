@@ -11,18 +11,13 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="<%- title %>">
     <meta name="apple-mobile-web-app-capable" content="yes">
-
     <link rel="icon" href="favicon.png">
     <link rel="apple-touch-icon" href="favicon.png">
-
-    <% if (IS_PROD) { %> <link rel="manifest" href="manifest.json"> <% } %>
-
-    <%- css %>
+    <% if (locals.IS_PROD) { %><link rel="manifest" href="manifest.json"><% } %>
+    <% if (locals.css) { %><%- css %><% } %>
   </head>
   <body>
-    <div id="app">
-      <div><%- html %></div>
-    </div>
+    <div id="app"><% if (locals.html) { %><div><%- html %></div><% } %></div>
     <% if (locals.initialPropsData) { %><script type="application/json" id="initialPropsData"><%- JSON.stringify(locals.initialPropsData) %></script><% } %>
     <script src="bundle.js"></script>
   </body>
