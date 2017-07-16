@@ -10,15 +10,14 @@ const {cd, exec, which} = require('shelljs')
 const hasYarn = () => Boolean(which('yarn'))
 
 program
-  .arguments('<name>')
-  .option('-p, --package', 'Adds a package.json to export.')
-  .option('-d, --development', 'Export in development mode.')
-  .action(name => exportApp({name, package: program.package, development: program.development}))
+  .option('-p, --package', 'Adds a package.json to your export.')
+  .option('-d, --development', 'Enable development mode.')
+  .action(() => exportApp({package: program.package, development: program.development}))
   .parse(process.argv)
 
 if(!program.args.length) exportApp(program.opts())
 
-function exportApp({name, package, development}) {
+function exportApp({package, development}) {
   if(!development) process.env.NODE_ENV = 'production'
 
   const webpack = require('webpack')

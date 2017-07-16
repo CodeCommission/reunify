@@ -21,7 +21,7 @@ process.on('SIGINT', () => {
 
 program
 .version(`${pkg.name} v${pkg.version}`)
-.command('create <folder>', 'Creates a Reunify application.')
-.command('serve <folder>', 'Serves a Reunify application.')
-.command('export <folder>', 'Exports a Reunify application.')
+.command('create <folder>', 'Creates an new application.')
+.command('serve', 'Serves an application.')
+.command('export', 'Exports application without server-side-rendering.')
 .parse(process.argv)
