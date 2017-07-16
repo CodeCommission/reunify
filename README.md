@@ -60,6 +60,7 @@ To see how simple this is, check out the [Example Apps](https://github.com/CodeC
 
 ```javascript
 import React from 'react'
+
 export const RepoList = props => (
   <ul>
     {
@@ -72,9 +73,8 @@ export const RepoList = props => (
 RepoList.getInitialProps = async () => {
   const res = await fetch('https://api.github.com/users/codecommission/repos')
   const data = await res.json()
-  const repos = data.filter(x => x.name.indexOf('reunify') !== -1)
-
-  return { repos}
+  const repos = data && data.filter(x => x.name.indexOf('reunify') !== -1)
+  return { repos }
 }
 
 export default RepoList

@@ -14,13 +14,13 @@ const ReactRouter = require('react-router')
 const webpack = require('webpack')
 const webpackMiddleware = require('webpack-middleware')
 const webpackConfig = require('./webpack.config.js')
-const {ServerStyleSheet} = require('styled-components')
+const {ServerStyleSheet, StyleSheetManager} = require('styled-components')
 const routes = require('./routes').default
 const app = express()
 
 app.disable('x-powered-by')
 app.use(compression())
-app.use(webpackMiddleware(webpack(webpackConfig), {noInfo: true, stats: {warnings: false, chunks: false}}))
+app.use(webpackMiddleware(webpack(webpackConfig), {noInfo: true, stats: {warnings: false, chunks: false, quiet: true}}))
 app.use(express.static('static'))
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
@@ -31,17 +31,15 @@ app.get('/sw.js', (req, res) => {
 })
 
 app.get('*', (req, res) => {
+  const sheet = new ServerStyleSheet()
   ReactRouter.match({ routes, location: req.url }, (err, redirectLocation, renderProps) => {
+
     if (redirectLocation) return res.redirect(302, redirectLocation.pathname + redirectLocation.search)
 
-    if (err) {
-      const sheet = new ServerStyleSheet()
-      return res.status(500).render('index', {title: '', description: '', name: '', IS_PROD, html: renderError(sheet, err), css: sheet.getStyleTags()})
-    }
+    if (err) return res.status(500).render('index', {title: '', description: '', name: '', IS_PROD, error: err, html: renderError(sheet, err), css: sheet.getStyleTags()})
 
     if (renderProps) {
       let statusCode = 200
-
       const promises = renderProps
         .components
         .filter(component => component.getInitialProps)
@@ -49,42 +47,36 @@ app.get('*', (req, res) => {
 
       Promise.all(promises)
         .then(data => {
-          try {
-            if(!IS_BOWSER && !IS_PROD) Object.keys(require.cache).forEach(x => delete require.cache[x])
+          if(!IS_BOWSER && !IS_PROD) Object.keys(require.cache).forEach(x => delete require.cache[x])
 
-            const sheet = new ServerStyleSheet()
-            const html = ReactDOM.renderToString(
-              sheet.collectStyles(
-                <ReactRouter.RouterContext
-                  {...renderProps}
-                  createElement={(Component, props) => {
-                    statusCode = props.route.is404 ? 404 : 200
-                    const componentInitialPropsData = (data.find(x => x.name === Component.name) || {}).componentInitialPropsData
-                    return (<Component {...props} {...componentInitialPropsData} env={process.env} />)
-                  }}
-                />
-              )
+          const html = ReactDOM.renderToString(sheet.collectStyles(
+              <ReactRouter.RouterContext
+                {...renderProps}
+                createElement={(Component, props) => {
+                  statusCode = props.route.is404 ? 404 : 200
+                  const componentInitialPropsData = (data.find(x => x.name === Component.name) || {}).componentInitialPropsData
+                  return (<Component {...props} {...componentInitialPropsData} env={process.env} />)
+                }}
+              />
             )
-            if (res.headersSent) return;
-            return res.status(statusCode).render('index', Object.assign(
-              {title: '', description: '', name: ''},
-              data && data[0] && data[0].componentInitialPropsData,
-              {
-                html,
-                IS_PROD,
-                css: sheet.getStyleTags(),
-                initialPropsData: data,
-              })
-            )
-          }
-          catch(error) {
-            console.error(`${error.message}\n${error.stack}`)
-            const sheet = new ServerStyleSheet()
-            return res.status(500).render('index', {title: '', description: '', name: '', IS_PROD, html: renderError(sheet, error), css: sheet.getStyleTags()})
-          }
+          )
+          if (res.headersSent) return;
+          return res.status(statusCode).render('index', Object.assign(
+            {title: '', description: '', name: ''},
+            data && data[0] && data[0].componentInitialPropsData,
+            {
+              html,
+              IS_PROD,
+              css: sheet.getStyleTags(),
+              initialPropsData: data,
+            })
+          )
+        })
+        .catch(error => {
+          console.error(`Server error: ${error.message}\n${error.stack}`)
+          return res.status(500).render('index', {title: '', description: '', name: '', IS_PROD, error: err, html: renderError(sheet, error), css: sheet.getStyleTags()})
         })
     } else {
-      const sheet = new ServerStyleSheet()
       return res.status(404).render('index', {title: '', description: '', name: '', IS_PROD, html: renderNotFound(sheet), css: sheet.getStyleTags()})
     }
   })

@@ -10,7 +10,8 @@ export default (
       try {
         cb(null, require('../../pages/Layout').default)
       } catch(err) {
-        cb(null, require('./pages/Layout').default)
+        if(err && err.message && err.message.indexOf('Cannot find module') !== -1) return cb(null, require('./pages/Layout').default)
+        cb(err, require('./pages/Layout').default)
       }
     }}
     getChildRoutes={(location, cb) => {
@@ -38,16 +39,22 @@ export default (
             path: fileName.toLowerCase(),
             getComponent: (location, cb) => {
               try {
-                const modRef = require(`../../pages/${fileName}`).default
-                cb(null, modRef)
+                cb(null, require(`../../pages/${fileName}`).default)
               } catch(err) {
-                const modRef = require(`./pages/${fileName}`).default
-                cb(null, modRef)
+                if(err && err.message && err.message.indexOf('Cannot find module') !== -1) return cb(null, require(`./pages/${fileName}`).default)
+                cb(err, require(`../../pages/${fileName}`).default)
               }
             }
           })).concat([{
             path: '*',
-            component: require('./pages/NotFound').default,
+            getComponent: () => {
+              try {
+                return require('../../pages/NotFound').default
+              } catch(err) {
+                if(err && err.message && err.message.indexOf('Cannot find module') !== -1) return require('./pages/NotFound').default
+                throw err
+              }
+            },
             is404: true
           }])
         )
@@ -57,7 +64,8 @@ export default (
       try {
         cb(null, require('../../pages/Index').default)
       } catch(err) {
-        cb(null, require('./pages/Index').default)
+        if(err && err.message && err.message.indexOf('Cannot find module') !== -1) return cb(null, require('./pages/Index').default)
+        cb(err, require('../../pages/Index').default)
       }
     }} />
   </Route>

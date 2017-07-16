@@ -19,6 +19,6 @@
   <body>
     <div id="app"><% if (locals.html) { %><div><%- html %></div><% } %></div>
     <% if (locals.initialPropsData) { %><script type="application/json" id="initialPropsData"><%- JSON.stringify(locals.initialPropsData) %></script><% } %>
-    <script src="bundle.js"></script>
+    <% if (!locals.error) { %><script src="bundle.js"></script><% } %>
   </body>
 </html>

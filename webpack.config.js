@@ -13,7 +13,7 @@ const config = {
     loaders: [
       {
         test: /\.js$/,
-        loader: 'babel',
+        loader: 'babel-loader',
         query: {
           presets: ['stage-0', 'es2015', 'react'],
           plugins: ['transform-class-properties'],

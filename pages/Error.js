@@ -10,7 +10,7 @@ export default props => (
     <h1>500 | Server Error</h1>
     {
       props.error &&
-      process
+      process &&
       process.env &&
       process.env.NODE_ENV !== 'production' &&
       <p>{props.error.stack}</p>
