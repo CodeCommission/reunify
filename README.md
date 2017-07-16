@@ -56,7 +56,7 @@ So far, we get:
 
 To see how simple this is, check out the [Example Apps](https://github.com/CodeCommission/reunify-examples)
 
-### Fetch / Load / Get data in components
+### Fetch / Load / Get data with functional components
 
 ```javascript
 import React from 'react'
@@ -70,14 +70,45 @@ export const RepoList = props => (
   </ul>
 )
 
-RepoList.getInitialProps = async () => {
-  const res = await fetch('https://api.github.com/users/codecommission/repos')
-  const data = await res.json()
+RepoList.getInitialProps = async (req, res) => {
+  const response = await fetch('https://api.github.com/users/codecommission/repos')
+  const data = await response.json()
   const repos = data && data.filter(x => x.name.indexOf('reunify') !== -1)
   return { repos }
 }
 
+RepoList.displayName = 'RepoList'
+
 export default RepoList
+```
+
+### Fetch / Load / Get data with class components
+
+```javascript
+import React from 'react'
+
+export default class RepoList extends React.PureComponent {
+  static async getInitialProps (req, res) {
+    const response = await fetch('https://api.github.com/users/codecommission/repos')
+    const data = await response.json()
+    const repos = data && data.filter(x => x.name.indexOf('reunify') !== -1)
+    return {repos}
+  }
+
+  render () {
+    return (
+      <div>
+        <h1>Reunify GitHub Repositories</h1>
+        <StyledList>
+          {
+            this.props.repos &&
+            this.props.repos.map((x, i) => <li key={i}><StyledLink href={x.html_url} taget="_blank">{x.name}</StyledLink></li>)
+          }
+        </StyledList>
+      </div>
+    )
+  }
+}
 ```
 
 ### CSS with Styled-Components
