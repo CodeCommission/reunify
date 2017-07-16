@@ -50,8 +50,72 @@ So far, we get:
 * Automatic transpilation and bundling (with webpack and babel)
 * Server rendering and indexing of `./pages`
 * Static file serving. `./static/` is mapped to `/static/`
+* CSS with awesome [Styled-Components](https://github.com/styled-components/styled-components)
+* Full [progressive web application](https://developers.google.com/web/progressive-web-apps/) support
+* Export without server-side-rendering
 
 To see how simple this is, check out the [Example Apps](https://github.com/CodeCommission/reunify-examples)
+
+### Fetch / Load / Get data in components
+
+```javascript
+import React from 'react'
+export const RepoList = props => (
+  <ul>
+    {
+      props.repos &&
+      props.repos.map((x, i) => <li key={i}><a href={x.html_url} taget="_blank">{x.name}</a></li>)
+    }
+  </ul>
+)
+
+RepoList.getInitialProps = async () => {
+  const res = await fetch('https://api.github.com/users/codecommission/repos')
+  const data = await res.json()
+  const repos = data.filter(x => x.name.indexOf('reunify') !== -1)
+
+  return { repos}
+}
+
+export default RepoList
+```
+
+### CSS with Styled-Components
+
+```javascript
+import React from 'react'
+import styled from 'styled-components'
+
+const StyledBox = styled.div`
+  border: 1px solid gray;
+  margin: 5px;
+  padding: 5px;
+`
+export default props => <StyledBox>Hello World</StyledBox>
+```
+
+### Export without Server-Side-Rendering
+
+Just enter:
+
+```bash
+npm run export
+```
+
+Your application was exported in `dist` folder.
+
+To get a full deployable (with an integrated SPA enabled HTTP server and package.json) just enter:
+
+```bash
+npm run export:package
+```
+
+Run a fterwards with:
+
+```bash
+cd dist
+npm run dev
+```
 
 ## Deploy it to the cloud with [DropStack](https://dropstack.run)
 
