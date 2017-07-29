@@ -33,9 +33,7 @@ app.get('/sw.js', (req, res) => {
 app.get('*', (req, res) => {
   const sheet = new ServerStyleSheet()
   ReactRouter.match({ routes, location: req.url }, (err, redirectLocation, renderProps) => {
-
     if (redirectLocation) return res.redirect(302, redirectLocation.pathname + redirectLocation.search)
-
     if (err) return res.status(500).render('index', {title: '', description: '', name: '', IS_PROD, error: err, html: renderError(sheet, err), css: sheet.getStyleTags()})
 
     if (renderProps) {
@@ -47,6 +45,7 @@ app.get('*', (req, res) => {
 
       Promise.all(promises)
         .then(data => {
+          if (res.headersSent) return
           if(!IS_BOWSER && !IS_PROD) Object.keys(require.cache).forEach(x => delete require.cache[x])
 
           const html = ReactDOM.renderToString(sheet.collectStyles(
@@ -60,7 +59,7 @@ app.get('*', (req, res) => {
               />
             )
           )
-          if (res.headersSent) return;
+
           return res.status(statusCode).render('index', Object.assign(
             {title: '', description: '', name: ''},
             data && data[0] && data[0].componentInitialPropsData,
