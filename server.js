@@ -62,9 +62,7 @@ app.get('*', (req, res) => {
             )
           )
           const helmet = Helmet.renderStatic();
-          return res.status(statusCode).render('index', Object.assign(
-            data && data[0] && data[0].componentInitialPropsData,
-            {
+          return res.status(statusCode).render('index', Object.assign({
               helmet,
               html,
               IS_PROD,
