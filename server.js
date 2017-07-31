@@ -14,6 +14,7 @@ const ReactRouter = require('react-router')
 const webpack = require('webpack')
 const webpackMiddleware = require('webpack-middleware')
 const webpackConfig = require('./webpack.config.js')
+const {Helmet} = require('react-helmet')
 const {ServerStyleSheet, StyleSheetManager} = require('styled-components')
 const routes = require('./routes').default
 const app = express()
@@ -32,6 +33,7 @@ app.get('/sw.js', (req, res) => {
 
 app.get('*', (req, res) => {
   const sheet = new ServerStyleSheet()
+
   ReactRouter.match({ routes, location: req.url }, (err, redirectLocation, renderProps) => {
     if (redirectLocation) return res.redirect(302, redirectLocation.pathname + redirectLocation.search)
     if (err) return res.status(500).render('index', {title: '', description: '', name: '', IS_PROD, error: err, html: renderError(sheet, err), css: sheet.getStyleTags()})
@@ -59,11 +61,11 @@ app.get('*', (req, res) => {
               />
             )
           )
-
+          const helmet = Helmet.renderStatic();
           return res.status(statusCode).render('index', Object.assign(
-            {title: '', description: '', name: ''},
             data && data[0] && data[0].componentInitialPropsData,
             {
+              helmet,
               html,
               IS_PROD,
               css: sheet.getStyleTags(),

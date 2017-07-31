@@ -12,6 +12,10 @@ const config = {
   module: {
     loaders: [
       {
+        test: /\.css$/,
+        loader: 'style-loader!css-loader',
+      },
+      {
         test: /\.js$/,
         loader: 'babel-loader',
         query: {
