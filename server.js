@@ -18,10 +18,12 @@ const {Helmet} = require('react-helmet')
 const {ServerStyleSheet, StyleSheetManager} = require('styled-components')
 const routes = require('./routes').default
 const app = express()
+const compiler = webpack(webpackConfig)
 
 app.disable('x-powered-by')
 app.use(compression())
-app.use(webpackMiddleware(webpack(webpackConfig), {noInfo: true, stats: {warnings: false, chunks: false, quiet: true}}))
+app.use(webpackMiddleware(compiler, {noInfo: true, quiet: true}))
+if(!IS_PROD) app.use(require('webpack-hot-middleware')(compiler, {noInfo: true, quiet: true}));
 app.use(express.static('static'))
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
@@ -72,7 +74,8 @@ app.get('*', (req, res) => {
           )
         })
         .catch(error => {
-          console.error(`Server error: ${error.message}\n${error.stack}`)
+          error = error || new Error('Reunify - unknown server (e.g. getInitialProps) error.')
+          console.error(`Reunify: ${error.message}\n${error.stack}`)
           return res.status(500).render('index', {title: '', description: '', name: '', IS_PROD, error: err, html: renderError(sheet, error), css: sheet.getStyleTags()})
         })
     } else {

@@ -10,7 +10,7 @@ export default (
       try {
         cb(null, require('../../pages/Layout').default)
       } catch(err) {
-        if(err && err.message && err.message.indexOf('Cannot find module') !== -1) return cb(null, require('./pages/Layout').default)
+        if(err && err.message && err.message.indexOf('Cannot') !== -1) return cb(null, require('./pages/Layout').default)
         cb(err, require('./pages/Layout').default)
       }
     }}
@@ -38,11 +38,13 @@ export default (
           .map(fileName => ({
             path: fileName.toLowerCase(),
             getComponent: (location, cb) => {
+              let mod = null;
               try {
-                cb(null, require(`../../pages/${fileName}`).default)
+                mod = require(`../../pages/${fileName}`).default
+                cb(null, mod)
               } catch(err) {
-                if(err && err.message && err.message.indexOf('Cannot find module') !== -1) return cb(null, require(`./pages/${fileName}`).default)
-                cb(err, require(`../../pages/${fileName}`).default)
+                if(err && err.message && err.message.indexOf('Cannot') !== -1) return cb(null, require(`./pages/${fileName}`).default)
+                cb(err, mod)
               }
             }
           })).concat([{
@@ -51,7 +53,7 @@ export default (
               try {
                 return require('../../pages/NotFound').default
               } catch(err) {
-                if(err && err.message && err.message.indexOf('Cannot find module') !== -1) return require('./pages/NotFound').default
+                if(err && err.message && err.message.indexOf('Cannot') !== -1) return require('./pages/NotFound').default
                 throw err
               }
             },
@@ -61,11 +63,13 @@ export default (
       })
     }}>
     <IndexRoute getComponent={(location, cb) => {
+      let mod = null;
       try {
-        cb(null, require('../../pages/Index').default)
+        mod = require('../../pages/Index').default
+        cb(null, mod)
       } catch(err) {
-        if(err && err.message && err.message.indexOf('Cannot find module') !== -1) return cb(null, require('./pages/Index').default)
-        cb(err, require('../../pages/Index').default)
+        if(err && err.message && err.message.indexOf('Cannot') !== -1) return cb(null, require('./pages/Index').default)
+        cb(err, mod)
       }
     }} />
   </Route>

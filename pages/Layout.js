@@ -12,6 +12,7 @@ const Layout = ({className, children}, context) => (
 const StyledLayout = styled(Layout)`
   font-family: Consolas, monaco, monospace;
 `
+
 StyledLayout.contextTypes = {
   sheet: PropTypes.object,
 }
