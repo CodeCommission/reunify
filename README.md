@@ -48,11 +48,14 @@ and then just run `npm run dev` and go to `http://localhost:3000`
 So far, we get:
 
 * Automatic transpilation and bundling (with webpack and babel)
+* Hot Module Replacement in Development
 * Server rendering and indexing of `./pages`
+* Import exisiting CSSs files
+* Full control of HTML `<head>` links, styles, scripts, title and meta with [`<Helmet>`](https://github.com/nfl/react-helmet)
 * Static file serving. `./static/` is mapped to `/static/`
 * CSS with awesome [Styled-Components](https://github.com/styled-components/styled-components)
-* Full [progressive web application](https://developers.google.com/web/progressive-web-apps/) support
-* Export without server-side-rendering
+* Full support of [progressive web application](https://developers.google.com/web/progressive-web-apps/) via ServiceWorkers in Development
+* Export a stand-alone Single-Page-App without Server-Side-Rendering
 
 To see how simple this is, check out the [Example Apps](https://github.com/CodeCommission/reunify-examples)
 
