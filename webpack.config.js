@@ -8,7 +8,13 @@ const config = {
   entry: ['babel-polyfill', 'isomorphic-fetch', path.join(__dirname, 'client.js')],
   output: { path: '/' },
   stats: {
-    warnings: false
+    warnings: false,
+  },
+  node: {
+    path: 'empty',
+    fs: 'empty',
+    child_process: 'empty',
+    vm: 'empty',
   },
   module: {
     loaders: [
@@ -28,6 +34,7 @@ const config = {
   },
   plugins: [
     new webpack.DefinePlugin({
+      'process.BROWSER': JSON.stringify(true),
       'process.env': {
         'BROWSER': JSON.stringify(true),
         'NODE_ENV': JSON.stringify(process.env.NODE_ENV),
