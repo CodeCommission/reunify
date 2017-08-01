@@ -6,15 +6,21 @@ const ManifestPlugin = require('webpack-manifest-plugin')
 
 const config = {
   entry: ['babel-polyfill', 'isomorphic-fetch', path.join(__dirname, 'client.js')],
-  output: { path: '/' },
-  stats: {
-    warnings: false,
+  output: { path: '/', strictModuleExceptionHandling: true },
+  options: {
+    babelrc: false,
+    cacheDirectory: true,
   },
+  stats: { warnings: false },
+  performance: { hints: false },
   node: {
+    __filename: true,
+    __dirname: true,
     path: 'empty',
     fs: 'empty',
     child_process: 'empty',
     vm: 'empty',
+    net: 'empty'
   },
   module: {
     loaders: [
@@ -30,9 +36,14 @@ const config = {
         test: /\.css$/,
         loader: 'style-loader!css-loader',
       },
+      {
+        test: /\.json$/,
+        loader: 'json-loader',
+      },
     ],
   },
   plugins: [
+    new ManifestPlugin(),
     new webpack.DefinePlugin({
       'process.BROWSER': JSON.stringify(true),
       'process.env': {
@@ -40,7 +51,6 @@ const config = {
         'NODE_ENV': JSON.stringify(process.env.NODE_ENV),
       }
     }),
-    new ManifestPlugin(),
   ],
 }
 config.devtool = IS_PROD ? 'cheap-module-source-map' : 'cheap-module-eval-source-map'
