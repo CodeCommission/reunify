@@ -7,6 +7,7 @@ const IS_BOWSER = process.env.BROWSER
 const path = require('path')
 const fs = require('fs')
 const express = require('express')
+const bodyParser = require('body-parser')
 const compression = require('compression')
 const React = require('react')
 const ReactDOM = require('react-dom/server')
@@ -21,6 +22,8 @@ const app = express()
 const compiler = webpack(webpackConfig)
 
 app.disable('x-powered-by')
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: true}))
 app.use(compression())
 app.use(webpackMiddleware(compiler, {noInfo: true, quiet: true}))
 if(!IS_PROD) app.use(require('webpack-hot-middleware')(compiler, {noInfo: true, quiet: true}));
@@ -33,7 +36,7 @@ app.get('/sw.js', (req, res) => {
   fs.createReadStream(path.join(__dirname, 'sw.js')).pipe(res)
 })
 
-app.get('*', (req, res) => {
+app.all('*', (req, res) => {
   const sheet = new ServerStyleSheet()
 
   ReactRouter.match({ routes, location: req.url }, (err, redirectLocation, renderProps) => {

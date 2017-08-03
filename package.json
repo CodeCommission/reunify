@@ -1,6 +1,6 @@
 {
   "name": "reunify",
-  "version": "4.0.4",
+  "version": "4.1.0",
   "description": "Simplified creation of universal ReactJS progressive web applications.",
   "author": "Mike Bild <mike@codecommission.com>",
   "homepage": "https://github.com/codecommission/reunify#readme",
@@ -45,6 +45,7 @@
     "babel-preset-react-hmre": "^1.1.1",
     "babel-preset-stage-0": "^6.24.1",
     "babel-register": "^6.24.1",
+    "body-parser": "^1.17.2",
     "boxen": "^1.2.1",
     "chalk": "^1.1.3",
     "classnames": "^2.2.5",
