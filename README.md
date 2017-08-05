@@ -11,9 +11,9 @@
 * Serves static content easily
 * Powerful component based CSS via [Styled-Components](https://www.styled-components.com/)
 * Full control of
-  * Resquest/Response (Express)[https://github.com/expressjs/express]
-  * HTML Head (Helmet)[https://github.com/helmetjs/helmet]
-  * Cookies (React-Cookies)[https://github.com/reactivestack/cookies]
+  * Resquest/Response ([Express](https://github.com/expressjs/express))
+  * HTML Head ([Helmet](https://github.com/helmetjs/helmet))
+  * Cookies ([React-Cookies](https://github.com/reactivestack/cookies))
 
 ## Setup & Run
 
