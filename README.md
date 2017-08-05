@@ -6,10 +6,14 @@
 
 * Server-side rendered ReactJS
 * Best bits of ES6 and ES7 supported
-* Powerful component based CSS via [Styled-Components](https://www.styled-components.com/)
 * Simplified routing on server and client side
 * Reliable and Fast with integrated Progressive Web Application support
 * Serves static content easily
+* Powerful component based CSS via [Styled-Components](https://www.styled-components.com/)
+* Full control of
+  * Resquest/Response (Express)[https://github.com/expressjs/express]
+  * HTML Head (Helmet)[https://github.com/helmetjs/helmet]
+  * Cookies (React-Cookies)[https://github.com/reactivestack/cookies]
 
 ## Setup & Run
 
