@@ -1,27 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <%- locals.helmet && locals.helmet.title && locals.helmet.title.toString() %>
     <meta charset="utf-8">
-    <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-name" content="">
-    <meta name="theme-color" content="aliceblue">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-title" content="">
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="icon" href="data:,">
+    <%- locals.helmet && locals.helmet.title && locals.helmet.title.toString() %>
     <%- locals.helmet && locals.helmet.meta && locals.helmet.meta.toString() %>
-    <link rel="icon" href="favicon.png">
-    <link rel="apple-touch-icon" href="favicon.png">
-    <% if (locals.IS_PROD) { %><link rel="manifest" href="manifest.json"><% } %>
     <%- locals.helmet && locals.helmet.link && locals.helmet.link.toString() %>
     <% if (locals.css) { %><%- css %><% } %>
     <%- locals.helmet && locals.helmet.style && locals.helmet.style.toString() %>
-    <%- locals.helmet && locals.helmet.script && locals.helmet.script.toString() %>
   </head>
   <body>
     <div id="app"><% if (locals.html) { %><div><%- html %></div><% } %></div>
     <% if (locals.initialPropsData) { %><script type="application/json" id="initialPropsData"><%- JSON.stringify(locals.initialPropsData) %></script><% } %>
     <% if (!locals.error) { %><script src="bundle.js"></script><% } %>
+    <%- locals.helmet && locals.helmet.script && locals.helmet.script.toString() %>
   </body>
 </html>

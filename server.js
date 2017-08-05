@@ -8,6 +8,8 @@ const path = require('path')
 const fs = require('fs')
 const express = require('express')
 const bodyParser = require('body-parser')
+const cookiesMiddleware = require('universal-cookie-express')
+const { CookiesProvider, Cookies } = require('react-cookie')
 const compression = require('compression')
 const React = require('react')
 const ReactDOM = require('react-dom/server')
@@ -25,8 +27,9 @@ app.disable('x-powered-by')
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(compression())
-app.use(webpackMiddleware(compiler, {noInfo: true, quiet: true}))
-if(!IS_PROD) app.use(require('webpack-hot-middleware')(compiler, {noInfo: true, quiet: true}));
+app.use(cookiesMiddleware())
+app.use(webpackMiddleware(compiler, {noInfo: true, quiet: true, stats: {warnings: false}}))
+if(!IS_PROD) app.use(require('webpack-hot-middleware')(compiler, {noInfo: true, quiet: true, stats: {warnings: false}}));
 app.use(express.static('static'))
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))
@@ -56,16 +59,19 @@ app.all('*', (req, res) => {
           if(!IS_BOWSER && !IS_PROD) Object.keys(require.cache).forEach(x => delete require.cache[x])
 
           const html = ReactDOM.renderToString(sheet.collectStyles(
-              <ReactRouter.RouterContext
-                {...renderProps}
-                createElement={(Component, props) => {
-                  statusCode = props.route.is404 ? 404 : 200
-                  const componentInitialPropsData = (data.find(x => x.name === Component.name) || {}).componentInitialPropsData
-                  return (<Component {...props} {...componentInitialPropsData} env={process.env} />)
-                }}
-              />
+              <CookiesProvider cookies={new Cookies(req.universalCookies.cookies)}>
+                <ReactRouter.RouterContext
+                  {...renderProps}
+                  createElement={(Component, props) => {
+                    statusCode = props.route.is404 ? 404 : 200
+                    const componentInitialPropsData = (data.find(x => x.name === Component.name) || {}).componentInitialPropsData
+                    return <Component {...props} {...componentInitialPropsData} env={process.env} />
+                  }}
+                />
+              </CookiesProvider>
             )
           )
+
           const helmet = Helmet.renderStatic();
           return res.status(statusCode).render('index', Object.assign({
               helmet,

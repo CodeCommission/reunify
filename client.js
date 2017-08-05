@@ -1,13 +1,14 @@
 import React from 'react'
 import { render } from 'react-dom'
 import { match, Router, browserHistory } from 'react-router'
+import { CookiesProvider } from 'react-cookie'
 import routes from './routes'
 
 const { pathname, search, hash } = window.location
 const location = `${pathname}${search}${hash}`
 
 match({ routes, location }, () => {
-  render(<Router routes={routes} history={browserHistory} createElement={handleCreateElement}/>, document.getElementById('app'))
+  render(<CookiesProvider><Router routes={routes} history={browserHistory} createElement={handleCreateElement}/></CookiesProvider>, document.getElementById('app'))
 })
 
 function handleCreateElement (Component, props) {
@@ -18,7 +19,7 @@ function handleCreateElement (Component, props) {
   } catch(e) {
     componentInitialPropsData = {error: e}
   }
-  return <Component {...componentInitialPropsData} {...props}/>
+  return <Component {...componentInitialPropsData} {...props} />
 }
 
 if(process.env.NODE_ENV !== 'production') {

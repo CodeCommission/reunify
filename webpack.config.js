@@ -6,12 +6,11 @@ const ManifestPlugin = require('webpack-manifest-plugin')
 
 const config = {
   entry: ['babel-polyfill', 'isomorphic-fetch', path.join(__dirname, 'client.js')],
-  output: { path: '/', strictModuleExceptionHandling: true },
+  output: { path: '/', strictModuleExceptionHandling: true, },
   options: {
     babelrc: false,
     cacheDirectory: true,
   },
-  stats: { warnings: false },
   performance: { hints: false },
   node: {
     __filename: true,
