@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html <%- locals.helmet && locals.helmet.htmlAttributes && helmet.htmlAttributes.toString() %>>
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,8 +10,8 @@
     <% if (locals.css) { %><%- css %><% } %>
     <%- locals.helmet && locals.helmet.style && locals.helmet.style.toString() %>
   </head>
-  <body>
-    <div id="app"><% if (locals.html) { %><div><%- html %></div><% } %></div>
+  <body <%- locals.helmet && locals.helmet.bodyAttributes && helmet.bodyAttributes.toString() %>>
+    <% if (locals.html) { %><div id="app"><%- html %></div><% } %>
     <% if (locals.initialPropsData) { %><script type="application/json" id="initialPropsData"><%- JSON.stringify(locals.initialPropsData) %></script><% } %>
     <% if (!locals.error) { %><script src="bundle.js"></script><% } %>
     <%- locals.helmet && locals.helmet.script && locals.helmet.script.toString() %>

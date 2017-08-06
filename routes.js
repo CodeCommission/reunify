@@ -31,8 +31,6 @@ export default (
 
         cb(null, pages
           .map(x => x.replace('.js',''))
-          .filter(x => x !== 'Index')
-          .filter(x => x !== 'Layout')
           .filter(x => x !== 'NotFound')
           .filter(x => x !== 'Error')
           .map(fileName => ({

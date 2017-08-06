@@ -19,7 +19,8 @@ const config = {
     fs: 'empty',
     child_process: 'empty',
     vm: 'empty',
-    net: 'empty'
+    net: 'empty',
+    dns: 'empty',
   },
   module: {
     loaders: [
@@ -28,7 +29,7 @@ const config = {
         loader: 'babel-loader',
         query: {
           presets: ['stage-0', 'es2015', 'react'],
-          plugins: ['transform-class-properties'],
+          plugins: ['transform-class-properties', 'css-modules-transform'],
         }
       },
       {

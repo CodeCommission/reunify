@@ -18,7 +18,7 @@ const webpack = require('webpack')
 const webpackMiddleware = require('webpack-middleware')
 const webpackConfig = require('./webpack.config.js')
 const {Helmet} = require('react-helmet')
-const {ServerStyleSheet, StyleSheetManager} = require('styled-components')
+const {ServerStyleSheet} = require('styled-components')
 const routes = require('./routes').default
 const app = express()
 const compiler = webpack(webpackConfig)
@@ -41,6 +41,7 @@ app.get('/sw.js', (req, res) => {
 
 app.all('*', (req, res) => {
   const sheet = new ServerStyleSheet()
+  const helmet = Helmet.peek()
 
   ReactRouter.match({ routes, location: req.url }, (err, redirectLocation, renderProps) => {
     if (redirectLocation) return res.redirect(302, redirectLocation.pathname + redirectLocation.search)
@@ -57,8 +58,8 @@ app.all('*', (req, res) => {
         .then(data => {
           if (res.headersSent) return
           if(!IS_BOWSER && !IS_PROD) Object.keys(require.cache).forEach(x => delete require.cache[x])
-
-          const html = ReactDOM.renderToString(sheet.collectStyles(
+          const html = ReactDOM.renderToStaticMarkup(
+            sheet.collectStyles(
               <CookiesProvider cookies={new Cookies(req.universalCookies.cookies)}>
                 <ReactRouter.RouterContext
                   {...renderProps}
@@ -72,12 +73,11 @@ app.all('*', (req, res) => {
             )
           )
 
-          const helmet = Helmet.renderStatic();
           return res.status(statusCode).render('index', Object.assign({
               helmet,
               html,
-              IS_PROD,
               css: sheet.getStyleTags(),
+              IS_PROD,
               initialPropsData: data,
             })
           )
