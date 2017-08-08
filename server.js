@@ -6,10 +6,11 @@ const IS_PROD = process.env.NODE_ENV === 'production'
 const IS_BOWSER = process.env.BROWSER
 const path = require('path')
 const fs = require('fs')
+const fse = require('fs-extra')
 const express = require('express')
 const bodyParser = require('body-parser')
 const cookiesMiddleware = require('universal-cookie-express')
-const { CookiesProvider, Cookies } = require('react-cookie')
+const {CookiesProvider, Cookies} = require('react-cookie')
 const compression = require('compression')
 const React = require('react')
 const ReactDOM = require('react-dom/server')
@@ -28,7 +29,7 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(compression())
 app.use(cookiesMiddleware())
-app.use(webpackMiddleware(compiler, {noInfo: true, quiet: true, stats: {warnings: false}}))
+if(!IS_PROD) app.use(webpackMiddleware(compiler, {noInfo: true, quiet: true, stats: {warnings: false}}))
 if(!IS_PROD) app.use(require('webpack-hot-middleware')(compiler, {noInfo: true, quiet: true, stats: {warnings: false}}));
 app.use(express.static('static'))
 app.set('view engine', 'ejs')
@@ -37,6 +38,20 @@ app.set('views', path.join(__dirname, 'views'))
 app.get('/sw.js', (req, res) => {
   res.setHeader('Content-Type', 'application/javascript')
   fs.createReadStream(path.join(__dirname, 'sw.js')).pipe(res)
+})
+
+app.get('/manifest.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json')
+  const manifestFilePath = `${process.cwd()}/static/manifest.json`
+
+  fse
+  .pathExists(manifestFilePath)
+  .then(exists => exists ? fs.createReadStream(manifestFilePath).pipe(res) : res.send({}))
+})
+
+app.get('/assets-manifest.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json')
+  fs.readdir(`${process.cwd()}/static`, (error, data) => res.send(data))
 })
 
 app.all('*', (req, res) => {
@@ -117,7 +132,19 @@ module.exports = () => {
   let server = {}
 
   return {
-    start: ({port, host}) => new Promise(resolve => server = app.listen(port, host, () => resolve({url: `http://${host}:${server.address().port}`}))),
+    start: ({port, host}) => build().then(() => new Promise(resolve => server = app.listen(port, host, () => resolve({url: `http://${host}:${server.address().port}`})))),
     stop: () => new Promise(resolve => server.close(() => resolve())),
   }
+}
+
+function build () {
+  return new Promise((resolve, reject) => {
+    if(!IS_PROD) return resolve()
+    process.stdout.write('Building...')
+    compiler.run((err, stats) => {
+      if(err) return reject(err)
+      console.log('Bundled!')
+      resolve()
+    })
+  })
 }

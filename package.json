@@ -1,6 +1,6 @@
 {
   "name": "reunify",
-  "version": "4.3.0",
+  "version": "4.4.1",
   "description": "Simplified creation of universal ReactJS progressive web applications.",
   "author": "Mike Bild <mike@codecommission.com>",
   "homepage": "https://github.com/codecommission/reunify#readme",
@@ -27,12 +27,13 @@
   },
   "scripts": {
     "start": "NODE_ENV=development ./bin/reunify serve",
+    "start:production": "NODE_ENV=production ./bin/reunify serve",
     "build": "npm run build-client && npm run build-server",
     "build-server": "babel -o ./app.js --presets 'react,es2015,stage-0' routes.js server.js",
     "build-client": "webpack ./client.js ./static/bundle.js"
   },
   "devDependencies": {
-    "eslint": "^4.0.0"
+    "eslint": "^4.4.0"
   },
   "dependencies": {
     "babel-cli": "^6.24.1",
@@ -54,7 +55,6 @@
     "compression": "^1.6.2",
     "css-loader": "^0.28.4",
     "ejs": "^2.5.7",
-    "eslint": "^4.4.0",
     "express": "^4.14.0",
     "fs-extra": "^3.0.1",
     "isomorphic-fetch": "^2.2.1",
@@ -76,7 +76,6 @@
     "update-notifier": "^2.2.0",
     "webpack": "^1.14.0",
     "webpack-hot-middleware": "^2.18.2",
-    "webpack-manifest-plugin": "^1.2.1",
     "webpack-middleware": "^1.5.1"
   }
 }

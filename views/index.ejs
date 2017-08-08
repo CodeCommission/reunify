@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="data:,">
+    <% if (locals.IS_PROD) { %><link rel="manifest" href="manifest.json"><% } %>
     <%- locals.helmet && locals.helmet.title && locals.helmet.title.toString() %>
     <%- locals.helmet && locals.helmet.meta && locals.helmet.meta.toString() %>
     <%- locals.helmet && locals.helmet.link && locals.helmet.link.toString() %>

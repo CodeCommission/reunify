@@ -32,8 +32,6 @@ function create ({name = '.', docker, nodeVersion = '6'}) {
   fse.ensureDir(projectDir)
     .then(() => fse.ensureDir(path.resolve(projectDir, 'static')))
     .then(() => fse.outputFile(path.resolve(projectDir, 'static', 'manifest.json'), createManifestTmpl({name})))
-    .then(() => fse.outputFile(path.resolve(projectDir, 'static', 'asset-manifest.json'), createAssetsManifestTmpl()))
-    .then(() => fse.copy(path.resolve(__dirname, '..', 'homescreen.png'), path.resolve(projectDir, 'static', 'homescreen.png')))
     .then(() => fse.outputFile(path.resolve(projectDir, 'pages', 'Index.js'), createIndexPage()))
     .then(() => fse.outputFile(path.resolve(projectDir, 'pages', 'About.js'), createAboutPage()))
     .then(() => fse.outputFile(path.resolve(projectDir, 'package.json'), createPackageTmpl({name, nodeVersion})))
@@ -94,8 +92,7 @@ function createIndexPage () {
 import { Link } from 'react-router'
 import styled from 'styled-components'
 
-const Title = ({className, text}) => <h1 className={className}>{text}</h1>
-const StyledTitle = styled(Title)\`
+const StyledTitle = styled.h1\`
   color: purple;
 \`
 
@@ -103,7 +100,7 @@ export default class Index extends React.Component {
   render() {
     return (
       <div>
-        <StyledTitle text="Index Page" />
+        <StyledTitle>Index Page</StyledTitle>
         <ul>
           <li><Link to={'/about'}>Client-Side Link</Link></li>
           <li><a href="/about">Server-Side Link (2s delay)</a></li>
@@ -142,10 +139,6 @@ export default class About extends React.Component {
 }`
 }
 
-function createAssetsManifestTmpl () {
-  return `[]`
-}
-
 function createManifestTmpl ({name}) {
   return `{
   "name": "${name}",
@@ -154,7 +147,7 @@ function createManifestTmpl ({name}) {
   "display": "standalone",
   "theme_color": "aliceblue",
   "background_color": "gray",
-  "description": "My ReactJS Web-App",
+  "description": "My ${name} React-Universal-App",
   "icons": [{
     "src": "homescreen.png",
     "sizes": "48x48",

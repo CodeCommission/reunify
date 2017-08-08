@@ -2,11 +2,10 @@ const NODE_ENV = process.env.NODE_ENV
 const IS_PROD = NODE_ENV === 'production'
 const path = require('path')
 const webpack = require('webpack')
-const ManifestPlugin = require('webpack-manifest-plugin')
 
 const config = {
   entry: ['babel-polyfill', 'isomorphic-fetch', path.join(__dirname, 'client.js')],
-  output: { path: '/', strictModuleExceptionHandling: true, },
+  output: {path: `${process.cwd()}/static`, strictModuleExceptionHandling: true},
   options: {
     babelrc: false,
     cacheDirectory: true,
@@ -43,7 +42,6 @@ const config = {
     ],
   },
   plugins: [
-    new ManifestPlugin(),
     new webpack.DefinePlugin({
       'process.BROWSER': JSON.stringify(true),
       'process.env': {

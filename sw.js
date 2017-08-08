@@ -18,7 +18,7 @@ self.addEventListener('activate', event => {
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => fetch('asset-manifest.json')
+      .then(cache => fetch('assets-manifest.json', {headers:{'Content-Type':'application/json'}})
         .then(res => res.json())
         .then(assets => cache.addAll(assets))
         .then(() => console.log('cached'))
