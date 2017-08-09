@@ -32,6 +32,7 @@ function create ({name = '.', docker, nodeVersion = '6'}) {
   fse.ensureDir(projectDir)
     .then(() => fse.ensureDir(path.resolve(projectDir, 'static')))
     .then(() => fse.outputFile(path.resolve(projectDir, 'static', 'manifest.json'), createManifestTmpl({name})))
+    .then(() => fse.outputFile(path.resolve(projectDir, 'static', 'assets-manifest.json'), createAssetsManifestTmpl()))
     .then(() => fse.outputFile(path.resolve(projectDir, 'pages', 'Index.js'), createIndexPage()))
     .then(() => fse.outputFile(path.resolve(projectDir, 'pages', 'About.js'), createAboutPage()))
     .then(() => fse.outputFile(path.resolve(projectDir, 'package.json'), createPackageTmpl({name, nodeVersion})))
@@ -182,6 +183,10 @@ function createManifestTmpl ({name}) {
     "id": "${name}"
   }]
 }`
+}
+
+function createAssetsManifestTmpl () {
+  return `[]`
 }
 
 function install ({path}) {

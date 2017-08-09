@@ -1,7 +1,7 @@
-const CACHE_NAME = 'pwa-cache-v1'
+var CACHE_NAME = 'pwa-cache-v__TIMESTAMP__'
 
 self.addEventListener('activate', event => {
-  const cacheWhitelist = [CACHE_NAME]
+  var cacheWhitelist = [CACHE_NAME]
   event.waitUntil(
     caches.keys()
       .then(keyList =>
@@ -21,7 +21,7 @@ self.addEventListener('install', event => {
       .then(cache => fetch('assets-manifest.json', {headers:{'Content-Type':'application/json'}})
         .then(res => res.json())
         .then(assets => cache.addAll(assets))
-        .then(() => console.log('cached'))
+        .then(() => console.log('Cached'))
       )
   )
 })

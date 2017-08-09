@@ -4,6 +4,7 @@ require('isomorphic-fetch')
 
 const IS_PROD = process.env.NODE_ENV === 'production'
 const IS_BOWSER = process.env.BROWSER
+const TIMESTAMP = Date.now()
 const path = require('path')
 const fs = require('fs')
 const fse = require('fs-extra')
@@ -37,12 +38,13 @@ app.set('views', path.join(__dirname, 'views'))
 
 app.get('/sw.js', (req, res) => {
   res.setHeader('Content-Type', 'application/javascript')
-  fs.createReadStream(path.join(__dirname, 'sw.js')).pipe(res)
+  fse.readFile(path.join(__dirname, 'sw.js'))
+  .then(text => res.send(text.toString().replace('__TIMESTAMP__', TIMESTAMP)))
 })
 
 app.get('/manifest.json', (req, res) => {
   res.setHeader('Content-Type', 'application/json')
-  const manifestFilePath = `${process.cwd()}/static/manifest.json`
+  const manifestFilePath = path.join(process.cwd(), '/static/manifest.json')
 
   fse
   .pathExists(manifestFilePath)
@@ -51,7 +53,14 @@ app.get('/manifest.json', (req, res) => {
 
 app.get('/assets-manifest.json', (req, res) => {
   res.setHeader('Content-Type', 'application/json')
-  fs.readdir(`${process.cwd()}/static`, (error, data) => res.send(data))
+  const assetsManifestFilePath = path.join(process.cwd(), '/static/assets-manifest.json')
+
+  fse
+  .pathExists(assetsManifestFilePath)
+  .then(exists => exists
+    ? fs.createReadStream(assetsManifestFilePath).pipe(res)
+    : fs.readdir(path.join(process.cwd(), '/static'), (error, data) => res.send(data))
+  )
 })
 
 app.all('*', (req, res) => {
