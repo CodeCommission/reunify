@@ -5,7 +5,7 @@ const webpack = require('webpack')
 
 const config = {
   entry: ['babel-polyfill', 'isomorphic-fetch', path.join(__dirname, 'client.js')],
-  output: {path: `${process.cwd()}/static`, strictModuleExceptionHandling: true},
+  output: {path: `${process.cwd()}/static`, publicPath: '/', strictModuleExceptionHandling: true},
   options: {
     babelrc: false,
     cacheDirectory: true,
