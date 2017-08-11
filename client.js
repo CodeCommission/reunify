@@ -27,7 +27,7 @@ if(process.env.NODE_ENV !== 'production') {
 } else if (!('serviceWorker' in navigator)) {
   console.error('ServiceWorker is not supported.')
 } else {
-  window.addEventListener('load', () => navigator.serviceWorker.register('sw.js')
+  window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js')
   .then(registration => console.log('ServiceWorker registration successful with scope: ', registration.scope), err => console.log('ServiceWorker registration failed: ', err))
   .catch(console.error))
 }
