@@ -34,40 +34,37 @@ export default (
           .filter(x => x !== 'NotFound')
           .filter(x => x !== 'Error')
           .map(fileName => ({
-            path: fileName.toLowerCase(),
+            path: `${fileName.toLowerCase()}(/:param1)(/:param2)(/:param3)(/:param4)(/:param5)`,
             getComponent: (location, cb) => {
-              let mod = null;
               try {
-                mod = require(`../../pages/${fileName}`).default
-                cb(null, mod)
+                cb(null, require(`../../pages/${fileName}`).default)
               } catch(err) {
                 if(err && err.message && err.message.indexOf('Cannot') !== -1) return cb(null, require(`./pages/${fileName}`).default)
-                cb(err, mod)
+                cb(err, require(`../../pages/${fileName}`).default)
               }
             }
-          })).concat([{
+          }))
+          .concat([{
             path: '*',
-            getComponent: () => {
+            is404: true,
+            getComponent: (location, cb) => {
               try {
-                return require('../../pages/NotFound').default
+                cb(null, require('../../pages/NotFound').default)
               } catch(err) {
-                if(err && err.message && err.message.indexOf('Cannot') !== -1) return require('./pages/NotFound').default
-                throw err
+                if(err && err.message && err.message.indexOf('Cannot') !== -1) return cb(null, require('./pages/NotFound').default)
+                cb(err, require('./pages/NotFound').default)
               }
             },
-            is404: true
           }])
         )
       })
     }}>
     <IndexRoute getComponent={(location, cb) => {
-      let mod = null;
       try {
-        mod = require('../../pages/Index').default
-        cb(null, mod)
+        cb(null, require('../../pages/Index').default)
       } catch(err) {
         if(err && err.message && err.message.indexOf('Cannot') !== -1) return cb(null, require('./pages/Index').default)
-        cb(err, mod)
+        cb(err, require('./pages/Index').default)
       }
     }} />
   </Route>

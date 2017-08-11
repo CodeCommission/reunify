@@ -67,12 +67,13 @@ app.all('*', (req, res) => {
   const sheet = new ServerStyleSheet()
   const helmet = Helmet.peek()
 
-  ReactRouter.match({ routes, location: req.url }, (err, redirectLocation, renderProps) => {
+  ReactRouter.match({routes, location: req.url}, (err, redirectLocation, renderProps) => {
     if (redirectLocation) return res.redirect(302, redirectLocation.pathname + redirectLocation.search)
     if (err) return res.status(500).render('index', {title: '', description: '', name: '', IS_PROD, error: err, html: renderError(sheet, err), css: sheet.getStyleTags()})
 
     if (renderProps) {
       let statusCode = 200
+      req.params = renderProps.router && renderProps.router.params ? renderProps.router.params : req.params
       const promises = renderProps
         .components
         .filter(component => component.getInitialProps)
