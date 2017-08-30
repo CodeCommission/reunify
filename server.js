@@ -80,7 +80,7 @@ app.all('*', (req, res) => {
       const promises = renderProps
         .components
         .filter(component => component.getInitialProps)
-        .map(component => component.getInitialProps(req, res, context).then(x => ({name: component.name, componentInitialPropsData: x})))
+        .map(component => component.getInitialProps(req, res, context).then(initialPropsData => ({name: component.name, componentInitialPropsData: Object.assign({}, initialPropsData, context)})))
 
       Promise.all(promises)
         .then(data => {
@@ -94,7 +94,7 @@ app.all('*', (req, res) => {
                   createElement={(Component, props) => {
                     statusCode = props.route.is404 ? 404 : 200
                     const componentInitialPropsData = (data.find(x => x.name === Component.name) || {}).componentInitialPropsData
-                    return <Component {...props} {...componentInitialPropsData} env={process.env} />
+                    return <Component {...props} {...componentInitialPropsData} />
                   }}
                 />
               </CookiesProvider>
