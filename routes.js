@@ -38,11 +38,8 @@ export default (
             getComponent: (location, cb) => {
               try {
                 cb(null, require(`../../pages/${fileName}`).default)
-              } catch(err) {
-                if(err && err.message && err.message.indexOf('Cannot') !== -1) return cb(null, require(`./pages/${fileName}`).default)
-                cb(err, require(`../../pages/${fileName}`).default)
-              }
-            }
+              } catch(err) {}
+            },
           }))
           .concat([{
             path: '*',
