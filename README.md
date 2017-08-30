@@ -77,7 +77,7 @@ export const RepoList = props => (
   </ul>
 )
 
-RepoList.getInitialProps = async (req, res) => {
+RepoList.getInitialProps = async (req, res, ctx) => {
   const response = await fetch('https://api.github.com/users/codecommission/repos')
   const data = await response.json()
   const repos = data && data.filter(x => x.name.indexOf('reunify') !== -1)
@@ -95,7 +95,7 @@ export default RepoList
 import React from 'react'
 
 export default class RepoList extends React.PureComponent {
-  static async getInitialProps (req, res) {
+  static async getInitialProps (req, res, ctx) {
     const response = await fetch('https://api.github.com/users/codecommission/repos')
     const data = await response.json()
     const repos = data && data.filter(x => x.name.indexOf('reunify') !== -1)

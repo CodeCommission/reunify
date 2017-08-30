@@ -74,10 +74,13 @@ app.all('*', (req, res) => {
     if (renderProps) {
       let statusCode = 200
       req.params = renderProps.router && renderProps.router.params ? renderProps.router.params : req.params
+      const context = {
+        env: process.env,
+      }
       const promises = renderProps
         .components
         .filter(component => component.getInitialProps)
-        .map(component => component.getInitialProps(req, res).then(x => ({name: component.name, componentInitialPropsData: x})))
+        .map(component => component.getInitialProps(req, res, context).then(x => ({name: component.name, componentInitialPropsData: x})))
 
       Promise.all(promises)
         .then(data => {
