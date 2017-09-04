@@ -79,12 +79,18 @@ app.all('*', (req, res) => {
       }
       const promises = renderProps
         .components
-        .filter(component => component.getInitialProps)
-        .map(component => component.getInitialProps(req, res, context).then(initialPropsData => ({name: component.name, componentInitialPropsData: Object.assign({}, initialPropsData, context)})))
+        .filter(component => component.getJSON || component.getInitialProps)
+        .map(component => component.getJSON
+          ? component.getJSON(req, res, context).then(initialPropsData => ({json: true, componentInitialPropsData: initialPropsData}))
+          : component.getInitialProps(req, res, context).then(initialPropsData => ({name: component.name, componentInitialPropsData: Object.assign({}, initialPropsData, context)}))
+        )
 
       Promise.all(promises)
         .then(data => {
           if (res.headersSent) return
+          const jsonDataIndex = data.findIndex(x => x.json)
+          if (jsonDataIndex !== -1) return res.send(data[jsonDataIndex].componentInitialPropsData)
+
           if(!IS_BOWSER && !IS_PROD) Object.keys(require.cache).forEach(x => delete require.cache[x])
           const html = ReactDOM.renderToStaticMarkup(
             sheet.collectStyles(
