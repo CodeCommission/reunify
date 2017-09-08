@@ -7,6 +7,7 @@
     <% if (locals.IS_PROD) { %><link rel="manifest" href="/manifest.json"><% } %>
     <%- locals.helmet && locals.helmet.title && locals.helmet.title.toString() %>
     <%- locals.helmet && locals.helmet.meta && locals.helmet.meta.toString() %>
+    <% if (!locals.error) { %><link href="/bundle.css" rel="stylesheet"/><% } %>
     <%- locals.helmet && locals.helmet.link && locals.helmet.link.toString() %>
     <% if (locals.css) { %><%- css %><% } %>
     <%- locals.helmet && locals.helmet.style && locals.helmet.style.toString() %>

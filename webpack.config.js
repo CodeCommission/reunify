@@ -2,6 +2,7 @@ const NODE_ENV = process.env.NODE_ENV
 const IS_PROD = NODE_ENV === 'production'
 const path = require('path')
 const webpack = require('webpack')
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const config = {
   entry: ['babel-polyfill', 'isomorphic-fetch', path.join(__dirname, 'client.js')],
@@ -28,17 +29,12 @@ const config = {
         loader: 'babel-loader',
         query: {
           presets: ['stage-0', 'es2015', 'react'],
-          plugins: ['transform-class-properties', 'css-modules-transform'],
+          plugins: ['transform-class-properties'],
         }
       },
-      {
-        test: /\.css$/,
-        loader: 'style-loader!css-loader',
-      },
-      {
-        test: /\.json$/,
-        loader: 'json-loader',
-      },
+      { test: /\.css$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader')},
+      { test: /\.json$/, loader: 'json-loader' },
+      { test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000' }
     ],
   },
   plugins: [
@@ -49,6 +45,7 @@ const config = {
         'NODE_ENV': JSON.stringify(process.env.NODE_ENV),
       }
     }),
+    new ExtractTextPlugin('bundle.css'),
   ],
 }
 config.devtool = IS_PROD ? 'cheap-module-source-map' : 'cheap-module-eval-source-map'
