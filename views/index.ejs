@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html <%- locals.helmet && locals.helmet.htmlAttributes && helmet.htmlAttributes.toString() %>>
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="data:,">
     <% if (locals.IS_PROD) { %><link rel="manifest" href="/manifest.json"><% } %>
     <%- locals.helmet && locals.helmet.title && locals.helmet.title.toString() %>
     <%- locals.helmet && locals.helmet.meta && locals.helmet.meta.toString() %>
@@ -13,7 +10,7 @@
     <%- locals.helmet && locals.helmet.style && locals.helmet.style.toString() %>
   </head>
   <body <%- locals.helmet && locals.helmet.bodyAttributes && helmet.bodyAttributes.toString() %>>
-    <% if (locals.html) { %><div id="app"><%- html %></div><% } %>
+    <div id="app"><%- locals.html %></div>
     <% if (locals.initialPropsData) { %><script type="application/json" id="initialPropsData"><%- JSON.stringify(locals.initialPropsData) %></script><% } %>
     <% if (!locals.error) { %><script src="/bundle.js"></script><% } %>
     <%- locals.helmet && locals.helmet.script && locals.helmet.script.toString() %>

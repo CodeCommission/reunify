@@ -28,6 +28,7 @@ function exportApp({package, development}) {
   const buildsDir = `${projectDir}/dist`
   webpackConfig.output = { path: buildsDir }
 
+  fse.removeSync(buildsDir)
   const compiler = webpack(webpackConfig)
   process.stderr.write('\x1B[?25l')
 
@@ -51,20 +52,20 @@ function exportApp({package, development}) {
     })
     .then(() => createHtmlTmpl({isProd: !development, name: appConfig.name, description: appConfig.description, title: appConfig.name}))
     .then(data => fse.outputFile(path.resolve(buildsDir, 'index.html'), data))
-    .then(() => fse.outputFile(path.resolve(buildsDir, 'asset-manifest.json'), createAssetsManifestTmpl()))
     .then(() => fse.copy(path.resolve(__dirname, './../sw.js'), path.resolve(buildsDir, 'sw.js')))
+    .then(() => fse.copy(path.resolve(projectDir, 'static'), path.resolve(buildsDir)))
     .then(() => install({path: buildsDir}))
     .then(() => {
       process.stdout.cursorTo(0)
       process.stdout.clearLine()
 
-      let message = chalk.green('Export to\n\n')
+      let message = chalk.green('SPA/PWA export to\n\n')
       message += chalk.gray(`${buildsDir}\n`)
-      message += chalk.green('\ncompleted!')
+      message += chalk.green('\ncompleted!\n')
 
       console.log(boxen(message, {padding: 1, borderColor: 'gray', margin: 1}));
     })
-    .catch(error => console.error(chalk.red(error.message)))
+    .catch(error => console.error(chalk.red(`\n${error.message}`)))
   })
 }
 
@@ -96,10 +97,6 @@ function createHtmlTmpl ({name, title, description, isProd, css, html}) {
   return fse
   .readFile(htmlFilePath)
   .then(data => ejs.render(data.toString(), {title, description, name, IS_PROD: isProd, css, html}))
-}
-
-function createAssetsManifestTmpl () {
-  return `[]`
 }
 
 function install ({path}) {
