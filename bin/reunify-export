@@ -53,7 +53,7 @@ function exportApp({package, development}) {
     .then(() => createHtmlTmpl({isProd: !development, name: appConfig.name, description: appConfig.description, title: appConfig.name}))
     .then(data => fse.outputFile(path.resolve(buildsDir, 'index.html'), data))
     .then(() => fse.copy(path.resolve(__dirname, './../sw.js'), path.resolve(buildsDir, 'sw.js')))
-    .then(() => fse.ensureFile(path.resolve(buildsDir, 'main.css'), ''))
+    .then(() => fse.ensureFile(path.resolve(buildsDir, 'main.css')))
     .then(() => fse.copy(path.resolve(projectDir, 'static'), path.resolve(buildsDir)))
     .then(() => package ? install({path: buildsDir}) : Promise.resolve())
     .then(() => {
