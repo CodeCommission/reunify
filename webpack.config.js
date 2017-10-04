@@ -27,7 +27,7 @@ const config = {
           plugins: ['transform-class-properties'],
         }
       },
-      { test: /\.css$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader')},
+      { test: /\.css$/, loader: ExtractTextPlugin.extract({fallback: 'style-loader', use: 'css-loader'}) },
       { test: /\.json$/, loader: 'json-loader' },
       { test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000' }
     ],
@@ -46,7 +46,7 @@ const config = {
         'NODE_ENV': JSON.stringify(process.env.NODE_ENV),
       }
     }),
-    new ExtractTextPlugin('bundle.css'),
+    new ExtractTextPlugin('main.css'),
   ],
 }
 config.devtool = IS_PROD ? 'cheap-module-source-map' : 'cheap-module-eval-source-map'
