@@ -7,11 +7,6 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const config = {
   entry: ['babel-polyfill', 'isomorphic-fetch', path.join(__dirname, 'client.js')],
   output: {path: `${process.cwd()}/static`, publicPath: '/', strictModuleExceptionHandling: true},
-  options: {
-    babelrc: false,
-    cacheDirectory: true,
-  },
-  performance: { hints: false },
   node: {
     __filename: true,
     __dirname: true,
@@ -28,7 +23,7 @@ const config = {
         test: /\.js$/,
         loader: 'babel-loader',
         query: {
-          presets: ['stage-0', 'es2015', 'react'],
+          presets: ['env', 'react'],
           plugins: ['transform-class-properties'],
         }
       },
@@ -38,6 +33,12 @@ const config = {
     ],
   },
   plugins: [
+    new webpack.LoaderOptionsPlugin({
+      options: {
+        babelrc: false,
+        cacheDirectory: true,
+      },
+    }),
     new webpack.DefinePlugin({
       'process.BROWSER': JSON.stringify(true),
       'process.env': {

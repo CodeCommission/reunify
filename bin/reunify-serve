@@ -21,7 +21,7 @@ const builds = readdirSync(buildFolder)
 
 require('babel-register')({
   only: builds,
-  presets: ['stage-0', 'es2015', 'react'],
+  presets: ['env', 'react'],
   plugins: ['transform-class-properties', 'css-modules-transform'],
 })
 

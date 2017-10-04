@@ -93,18 +93,16 @@ app.all('*', (req, res) => {
 
           if(!IS_BOWSER && !IS_PROD) Object.keys(require.cache).forEach(x => delete require.cache[x])
           const html = ReactDOM.renderToStaticMarkup(
-            sheet.collectStyles(
-              <CookiesProvider cookies={new Cookies(req.universalCookies.cookies)}>
-                <ReactRouter.RouterContext
-                  {...renderProps}
-                  createElement={(Component, props) => {
-                    statusCode = props.route.is404 ? 404 : 200
-                    const componentInitialPropsData = (data.find(x => x.name === Component.name) || {}).componentInitialPropsData
-                    return <Component {...props} {...componentInitialPropsData} />
-                  }}
-                />
-              </CookiesProvider>
-            )
+            <CookiesProvider cookies={new Cookies(req.universalCookies.cookies)}>
+              <ReactRouter.RouterContext
+                {...renderProps}
+                createElement={(Component, props) => {
+                  statusCode = props.route.is404 ? 404 : 200
+                  const componentInitialPropsData = (data.find(x => x.name === Component.name) || {}).componentInitialPropsData
+                  return sheet.collectStyles(<Component {...props} {...componentInitialPropsData} />)
+                }}
+              />
+            </CookiesProvider>
           )
 
           return res.status(statusCode).render('index', Object.assign({

@@ -7,7 +7,7 @@ const StyledMain = styled.div`
   width: 100%;
 `
 
-export default class extends React.Component {
+export default class Index extends React.Component {
   static async getInitialProps () {
     return {}
   }
