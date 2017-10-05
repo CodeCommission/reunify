@@ -30,8 +30,8 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(compression())
 app.use(cookiesMiddleware())
-if(!IS_PROD) app.use(webpackMiddleware(compiler, {noInfo: true, quiet: true, stats: {warnings: false}}))
-if(!IS_PROD) app.use(require('webpack-hot-middleware')(compiler, {noInfo: true, quiet: true, stats: {warnings: false}}));
+if(!IS_PROD) app.use(webpackMiddleware(compiler, {noInfo: true, quiet: true}))
+if(!IS_PROD) app.use(require('webpack-hot-middleware')(compiler, {noInfo: true, quiet: true}));
 app.use(express.static('static'))
 app.set('view engine', 'ejs')
 app.set('views', path.join(__dirname, 'views'))

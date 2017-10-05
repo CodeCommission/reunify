@@ -1,12 +1,13 @@
+process.noDeprecation = true
 const NODE_ENV = process.env.NODE_ENV
 const IS_PROD = NODE_ENV === 'production'
 const path = require('path')
 const webpack = require('webpack')
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 const config = {
   entry: ['babel-polyfill', 'isomorphic-fetch', path.join(__dirname, 'client.js')],
-  output: {path: `${process.cwd()}/static`, publicPath: '/', strictModuleExceptionHandling: true},
+  output: {path: `${process.cwd()}/static`, publicPath: '/', strictModuleExceptionHandling: false},
   node: {
     __filename: true,
     __dirname: true,
@@ -21,11 +22,12 @@ const config = {
     loaders: [
       {
         test: /\.js$/,
-        loader: 'babel-loader',
+        loader: 'babel-loader?cacheDirectory',
+        exclude: /node_modules\/(?!(reunify)\/).*/,
         query: {
           presets: ['env', 'react'],
-          plugins: ['transform-class-properties'],
-        }
+          plugins: ['transform-class-properties',  'babel-plugin-styled-components'],
+        },
       },
       { test: /\.css$/, loader: ExtractTextPlugin.extract({fallback: 'style-loader', use: 'css-loader'}) },
       { test: /\.json$/, loader: 'json-loader' },
