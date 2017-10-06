@@ -13,9 +13,9 @@
 
 * Server-side rendered ReactJS
 * Provides the best bits of ES6 and ES7
+* Serves Static, HTML and JSON content
 * Simplified routing on server and client side
 * Reliable and Fast with integrated Progressive Web Application support
-* Serves static content easily
 * Powerful component based CSS via [Styled-Components](https://www.styled-components.com)
 * Full control of
   * Resquest/Response ([Express](https://github.com/expressjs/express))
