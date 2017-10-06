@@ -7,6 +7,7 @@ This document contains a rough outline of a roadmap and a few designs for future
 ### Completed
 
 * Upgrade to React v16.x
+* Faster builds
 
 ### Current
 
@@ -14,17 +15,20 @@ This document contains a rough outline of a roadmap and a few designs for future
 * Enhance documentation and tests
 * Deployment guide to:
   * [DropStack](https://dropstack.run)
+  * Docker
+  * AWS / Azure
+  * Heroku
 
 ### Next up
 
 * Upgrade to React-Router v4
-* Faster builds
+* Redux integration
 * Simplification of API
 * More examples
 
 ### Future
 
-* Reduce external dependencies
+* Reduce NPM dependencies
 
 ## Proposed designs
 

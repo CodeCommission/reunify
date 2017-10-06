@@ -2,15 +2,21 @@
 
 * [Installation](#installation)
 * [CLI](#cli)
-* [Setup an App](#setup-an-app)
+* [Setup a Server-Side React App](#setup-a-server-side-react-app)
 * [Programmers Guide](#programmers-guide)
 
 ## Installation
 
-Reunify SSR React is super easy to set up. Just `npm install -g reunify`, write a web page using React, and then use one of the following snippets to get started. For more info, read the Reunify docs.
+Reunify is super easy to set up. Just `npm install -g reunify`, write a web page using React, and then use one of the following snippets to get started. For more info, read the Reunify docs.
 
 ```bash
 npm install -g reunify
+```
+
+Alternatively
+
+```bash
+yarn global add reunify
 ```
 
 ## CLI
@@ -31,12 +37,13 @@ Options:
 
 Commands:
 
-  serve <name>   serve function
-  create [name]  sreate function
-  help [cmd]     display help for [cmd]
+  create <folder>  Creates an new application.
+  serve            Serves an application.
+  export           Exports application without server-side-rendering.
+  help [cmd]       display help for [cmd]
 ```
 
-## Setup an App
+## Setup a Server-Side React App
 
 ```bash
 reunify create my-react-app
