@@ -1,8 +1,17 @@
 process.noDeprecation = true;
+let appPackage;
+try {
+  appPackage = require("../../package.json");
+} catch (err) {
+  appPackage = require("./package.json");
+}
 const NODE_ENV = process.env.NODE_ENV;
+const APP_NAME = (process.env.APP_NAME = appPackage.name);
+const APP_VERSION = (process.env.APP_VERSION = appPackage.version);
 const IS_PROD = NODE_ENV === "production";
 const path = require("path");
 const webpack = require("webpack");
+
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 const config = {
@@ -52,7 +61,6 @@ const config = {
           use: "css-loader"
         })
       },
-      { test: /\.json$/, loader: "json-loader" },
       {
         test: /\.(png|woff|woff2|eot|ttf|svg)$/,
         loader: "url-loader?limit=100000"
@@ -70,7 +78,9 @@ const config = {
       "process.BROWSER": JSON.stringify(true),
       "process.env": {
         BROWSER: JSON.stringify(true),
-        NODE_ENV: JSON.stringify(process.env.NODE_ENV)
+        NODE_ENV: JSON.stringify(NODE_ENV),
+        APP_VERSION: JSON.stringify(APP_VERSION),
+        APP_NAME: JSON.stringify(APP_NAME)
       }
     }),
     new ExtractTextPlugin("main.css")
