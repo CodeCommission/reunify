@@ -1,6 +1,6 @@
 {
   "name": "reunify",
-  "version": "5.0.0",
+  "version": "5.0.2",
   "description":
     "Simplified creation of universal ReactJS progressive web applications.",
   "author": "Mike Bild <mike@codecommission.com>",
@@ -56,7 +56,7 @@
     "ejs": "^2.5.7",
     "eslint": "^4.10.0",
     "express": "^4.15.4",
-    "extract-text-webpack-plugin": "^3.0.2",
+    "extract-text-webpack-plugin": "^2.1.2",
     "file-loader": "^1.1.4",
     "fs-extra": "^4.0.2",
     "isomorphic-fetch": "^2.2.1",
