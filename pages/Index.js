@@ -1,23 +1,23 @@
-import React from 'react'
-import styled from 'styled-components'
+import React from 'react';
+import styled from 'styled-components';
 
 const StyledMain = styled.div`
   padding: 5px;
   height: 100vh;
   width: 100%;
-`
+`;
 
 export default class Index extends React.Component {
-  static async getInitialProps () {
-    return {}
+  static async getInitialProps() {
+    return {};
   }
 
-  render () {
+  render() {
     return (
       <StyledMain>
         <h1>Welcome to Reunify!</h1>
         <p>Modify this page with your own content!</p>
       </StyledMain>
-    )
+    );
   }
 }

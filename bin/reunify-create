@@ -1,57 +1,67 @@
 #!/usr/bin/env node
 
-const path = require('path')
-const program = require('commander')
-const boxen = require('boxen')
-const chalk = require('chalk')
-const fse = require('fs-extra')
-const {cd, exec, which} = require('shelljs')
-const hasYarn = () => Boolean(which('yarn'))
+const path = require('path');
+const program = require('commander');
+const boxen = require('boxen');
+const chalk = require('chalk');
+const fse = require('fs-extra');
+const {cd, exec, which} = require('shelljs');
+const hasYarn = () => Boolean(which('yarn'));
 
 program
   .arguments('<name>')
   .option('-d, --docker', 'Include dockerfile (mhart/alpine-node)')
   .option('-n, --node [version]', 'NodeJS 6/7/8 (mhart/alpine-node)')
   .action(name => create({name, docker: program.docker, nodeVersion: program.node}))
-  .parse(process.argv)
+  .parse(process.argv);
 
-if(!program.args.length) create({})
+if (!program.args.length) create({});
 
-function create ({name = '.', docker, nodeVersion = '6'}) {
-  if(!name) {
-    console.error(chalk.red('Enter a project name.'))
-    process.exit(1)
+function create({name = '.', docker, nodeVersion = '6'}) {
+  if (!name) {
+    console.error(chalk.red('Enter a project name.'));
+    process.exit(1);
   }
-  const projectDir = path.resolve(process.cwd(), name)
+  const projectDir = path.resolve(process.cwd(), name);
 
   if (path.basename(projectDir) === 'pages') {
-    console.error(chalk.red('Your root directory is named "pages". This looks suspicious. You probably want to go one directory up.'))
-    process.exit(1)
+    console.error(
+      chalk.red(
+        'Your root directory is named "pages". This looks suspicious. You probably want to go one directory up.'
+      )
+    );
+    process.exit(1);
   }
 
-  fse.ensureDir(projectDir)
+  fse
+    .ensureDir(projectDir)
     .then(() => fse.ensureDir(path.resolve(projectDir, 'static')))
     .then(() => fse.outputFile(path.resolve(projectDir, 'static', 'manifest.json'), createManifestTmpl({name})))
     .then(() => fse.outputFile(path.resolve(projectDir, 'static', 'assets-manifest.json'), createAssetsManifestTmpl()))
     .then(() => fse.outputFile(path.resolve(projectDir, 'pages', 'Index.js'), createIndexPage()))
     .then(() => fse.outputFile(path.resolve(projectDir, 'pages', 'About.js'), createAboutPage()))
     .then(() => fse.outputFile(path.resolve(projectDir, 'package.json'), createPackageTmpl({name, nodeVersion})))
-    .then(() => docker ? fse.outputFile(path.resolve(projectDir, 'Dockerfile'), createDockerTmpl({name, nodeVersion})) : Promise.resolve())
+    .then(
+      () =>
+        docker
+          ? fse.outputFile(path.resolve(projectDir, 'Dockerfile'), createDockerTmpl({name, nodeVersion}))
+          : Promise.resolve()
+    )
     .then(() => install({path: projectDir}))
     .then(() => {
-      let message = `${chalk.green(`Universal ReactJS PWA created!`)}\n\n`
-      message += `Serve ${chalk.gray.bold(`${name}`)} with:\n\n`
-      message += `Development: ${chalk.gray.bold(`npm run dev`)}\n`
-      message += `Production : ${chalk.gray.bold(`npm start`)}`
-      console.log(boxen(message, {padding: 1, borderColor: 'gray', margin: 1}))
+      let message = `${chalk.green(`Universal ReactJS PWA created!`)}\n\n`;
+      message += `Serve ${chalk.gray.bold(`${name}`)} with:\n\n`;
+      message += `Development: ${chalk.gray.bold(`npm run dev`)}\n`;
+      message += `Production : ${chalk.gray.bold(`npm start`)}`;
+      console.log(boxen(message, {padding: 1, borderColor: 'gray', margin: 1}));
     })
     .catch(err => {
-      console.error(chalk.red(`An unexpected error occured. ${err.message}`))
-      process.exit(1)
-    })
+      console.error(chalk.red(`An unexpected error occured. ${err.message}`));
+      process.exit(1);
+    });
 }
 
-function createPackageTmpl ({name, nodeVersion = 6}) {
+function createPackageTmpl({name, nodeVersion = 6}) {
   return `{
     "private": true,
     "version": "0.0.0",
@@ -71,10 +81,10 @@ function createPackageTmpl ({name, nodeVersion = 6}) {
       "dev" : "PORT=8080 NODE_ENV=development reunify serve",
       "start": "PORT=80 NODE_ENV=production reunify serve --silent"
     }
-  }`
+  }`;
 }
 
-function createDockerTmpl ({name, nodeVersion}) {
+function createDockerTmpl({name, nodeVersion}) {
   return `FROM mhart/alpine-node:${nodeVersion}
 ENV PORT=80
 ENV NODE_ENV=production
@@ -85,10 +95,10 @@ WORKDIR /app
 COPY package.json /app
 RUN npm install --production
 COPY . /app
-CMD ["npm", "start"]`
+CMD ["npm", "start"]`;
 }
 
-function createIndexPage () {
+function createIndexPage() {
   return `import React from 'react'
 import { Link } from 'react-router'
 import styled from 'styled-components'
@@ -109,10 +119,10 @@ export default class Index extends React.Component {
       </div>
     )
   }
-}`
+}`;
 }
 
-function createAboutPage () {
+function createAboutPage() {
   return `import React from 'react'
 import { Link } from 'react-router'
 
@@ -137,10 +147,10 @@ export default class About extends React.Component {
       </div>
     )
   }
-}`
+}`;
 }
 
-function createManifestTmpl ({name}) {
+function createManifestTmpl({name}) {
   return `{
   "name": "${name}",
   "short_name": "${name}",
@@ -182,21 +192,21 @@ function createManifestTmpl ({name}) {
     "platform": "web",
     "id": "${name}"
   }]
-}`
+}`;
 }
 
-function createAssetsManifestTmpl () {
-  return `[]`
+function createAssetsManifestTmpl() {
+  return `[]`;
 }
 
-function install ({path}) {
+function install({path}) {
   return new Promise((resolve, reject) => {
-    cd(path)
-    const installCmd = hasYarn() ? 'yarn' : 'npm install'
+    cd(path);
+    const installCmd = hasYarn() ? 'yarn' : 'npm install';
 
     exec(installCmd, (code, stdout, stderr) => {
-      if (code !== 0) return reject(stderr)
-      resolve()
-    })
-  })
+      if (code !== 0) return reject(stderr);
+      resolve();
+    });
+  });
 }
