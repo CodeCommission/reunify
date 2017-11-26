@@ -6,7 +6,7 @@ try {
   appPackage = require('./package.json');
 }
 const NODE_ENV = process.env.NODE_ENV;
-const API_URL = process.env.API_URL;
+const API_URL = process.env.API_URL || process.env.HOSTNAME;
 const APP_NAME = (process.env.APP_NAME = appPackage.name);
 const APP_VERSION = (process.env.APP_VERSION = appPackage.version);
 const IS_PROD = NODE_ENV === 'production';
