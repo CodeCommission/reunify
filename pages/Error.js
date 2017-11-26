@@ -1,7 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const StyledError = styled.div`font-family: Consolas, monaco, monospace;`;
+const StyledError = styled.div`
+  font-family: Consolas, monaco, monospace;
+`;
 
 export default props => (
   <StyledError>

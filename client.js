@@ -20,9 +20,8 @@ function handleCreateElement(Component, props) {
   let componentInitialPropsData = {};
   try {
     const initialPropsData = JSON.parse(document.getElementById('initialPropsData').textContent);
-    componentInitialPropsData = (initialPropsData.find(
-      x => x.name === Component.name || x.name === Component.displayName
-    ) || {}
+    componentInitialPropsData = (
+      initialPropsData.find(x => x.name === Component.name || x.name === Component.displayName) || {}
     ).componentInitialPropsData;
   } catch (e) {
     componentInitialPropsData = {error: e};

@@ -1,5 +1,7 @@
-import React from 'react';
+import React, {PureComponent} from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
+import './Index.css';
 
 const StyledMain = styled.div`
   padding: 5px;
@@ -7,7 +9,9 @@ const StyledMain = styled.div`
   width: 100%;
 `;
 
-export default class Index extends React.Component {
+StyledMain.contextTypes = {sheet: PropTypes.object};
+
+export default class Index extends PureComponent {
   static async getInitialProps() {
     return {};
   }

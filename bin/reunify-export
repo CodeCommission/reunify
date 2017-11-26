@@ -79,7 +79,7 @@ function exportApp({package, development}) {
   });
 }
 
-function createPackageTmpl({name, nodeVersion = 6}) {
+function createPackageTmpl({name, nodeVersion = 8}) {
   return `{
   "private": true,
   "name": "${name}",

@@ -44,7 +44,8 @@ const config = {
             [
               'babel-plugin-styled-components',
               {
-                ssr: true
+                ssr: true,
+                displayName: true
               }
             ]
           ]

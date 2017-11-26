@@ -20,7 +20,7 @@ const webpack = require('webpack');
 const webpackMiddleware = require('webpack-middleware');
 const webpackConfig = require('./webpack.config.js');
 const {Helmet} = require('react-helmet');
-const {ServerStyleSheet} = require('styled-components');
+const {ServerStyleSheet, StyleSheetManager} = require('styled-components');
 const routes = require('./routes').default;
 const app = express();
 const compiler = webpack(webpackConfig);
@@ -41,6 +41,14 @@ app.get('/sw.js', (req, res) => {
   fse
     .readFile(path.join(__dirname, 'sw.js'))
     .then(text => res.send(text.toString().replace('__TIMESTAMP__', TIMESTAMP)));
+});
+
+app.get('/main.css', (req, res) => {
+  res.setHeader('Content-Type', 'text/css');
+  const manifestFilePath = path.join(process.cwd(), '/static/main.css');
+  fse
+    .pathExists(manifestFilePath)
+    .then(exists => (exists ? fs.createReadStream(manifestFilePath).pipe(res) : res.sendStatus(404)));
 });
 
 app.get('/manifest.json', (req, res) => {
@@ -115,7 +123,11 @@ app.all('*', (req, res) => {
                   statusCode = props.route.is404 ? 404 : 200;
                   const componentInitialPropsData = (data.find(x => x.name === Component.name) || {})
                     .componentInitialPropsData;
-                  return sheet.collectStyles(<Component {...props} {...componentInitialPropsData} />);
+                  return (
+                    <StyleSheetManager sheet={sheet.instance}>
+                      <Component {...props} {...componentInitialPropsData} />
+                    </StyleSheetManager>
+                  );
                 }}
               />
             </CookiesProvider>
