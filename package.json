@@ -1,6 +1,6 @@
 {
   "name": "reunify",
-  "version": "5.2.0",
+  "version": "5.2.1",
   "description": "Simplified creation of universal ReactJS progressive web applications.",
   "author": "Mike Bild <mike@codecommission.com>",
   "homepage": "https://github.com/codecommission/reunify#readme",
@@ -12,15 +12,7 @@
   "bugs": {
     "url": "https://github.com/codecommission/reunify/issues"
   },
-  "keywords": [
-    "universal",
-    "react",
-    "server",
-    "render",
-    "progressive",
-    "pwa",
-    "export"
-  ],
+  "keywords": ["universal", "react", "server", "render", "progressive", "pwa", "export"],
   "main": "server.js",
   "bin": {
     "reunify": "./bin/reunify"

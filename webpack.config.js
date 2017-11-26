@@ -6,6 +6,7 @@ try {
   appPackage = require('./package.json');
 }
 const NODE_ENV = process.env.NODE_ENV;
+const API_URL = process.env.API_URL;
 const APP_NAME = (process.env.APP_NAME = appPackage.name);
 const APP_VERSION = (process.env.APP_VERSION = appPackage.version);
 const IS_PROD = NODE_ENV === 'production';
@@ -76,6 +77,7 @@ const config = {
       'process.env': {
         BROWSER: JSON.stringify(true),
         NODE_ENV: JSON.stringify(NODE_ENV),
+        API_URL: JSON.stringify(API_URL),
         APP_VERSION: JSON.stringify(APP_VERSION),
         APP_NAME: JSON.stringify(APP_NAME)
       }
