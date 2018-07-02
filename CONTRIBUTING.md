@@ -2,15 +2,15 @@
 
 Excited about Reunify and want to make it better? We’re excited too!
 
-Reunify is build for developers just like you, striving to create tools and libraries around isomorphic JavaScript, React and Progressive Web Apps. We welcome anyone who wants to contribute or provide constructive feedback, no matter the level of experience. If you want to help but don't know where to start, let us know, and we'll find something for you.
+Reunify is build and export for developers just like you, striving to create tools and libraries around isomorphic JavaScript, React and Progressive Web Apps. We welcome anyone who wants to contribute or provide constructive feedback, no matter the level of experience. If you want to help but don't know where to start, let us know, and we'll find something for you.
 
 Here are some ways to contribute to the project, from easiest to most difficult:
 
-* [Reporting bugs](#reporting-bugs)
-* [Improving the documentation](#improving-the-documentation)
-* [Responding to issues](#responding-to-issues)
-* [Bug fixes](#bug-fixes)
-* [Suggesting features](#suggesting-features)
+- [Reporting bugs](#reporting-bugs)
+- [Improving the documentation](#improving-the-documentation)
+- [Responding to issues](#responding-to-issues)
+- [Bug fixes](#bug-fixes)
+- [Suggesting features](#suggesting-features)
 
 ## Issues
 
@@ -20,9 +20,9 @@ If you encounter a bug, please file an issue on GitHub via the repository. If an
 
 While we will try to be as helpful as we can on any issue reported, please include the following to maximize the chances of a quick fix:
 
-1. **Intended outcome:** What you were trying to accomplish when the bug occurred, and as much code as possible related to the source of the problem.
-2. **Actual outcome:** A description of what actually happened, including a screenshot or copy-paste of any related error messages, logs, or other output that might be related.
-3. **How to reproduce the issue:** Instructions for how the issue can be reproduced by a maintainer or contributor.
+1.  **Intended outcome:** What you were trying to accomplish when the bug occurred, and as much code as possible related to the source of the problem.
+2.  **Actual outcome:** A description of what actually happened, including a screenshot or copy-paste of any related error messages, logs, or other output that might be related.
+3.  **How to reproduce the issue:** Instructions for how the issue can be reproduced by a maintainer or contributor.
 
 Creating a good reproduction really helps contributors investigate and resolve your issue quickly.
 
@@ -46,11 +46,11 @@ Most of the features in Reunify came from suggestions by you! We welcome any ide
 
 Here are some things we look for:
 
-1. **Required CI checks pass.** This is a prerequisite for the review, and it is the PR author's responsibility.
-2. **Simplicity.** If there are too many files, redundant functions, or complex lines of code, suggest a simpler way to do the same thing. In particular, avoid implementing an overly general solution when a simple, small, and pragmatic fix will do.
-3. **Testing.** Do the tests ensure this code won’t break when other stuff changes.
-4. **No unnecessary or unrelated changes.** PRs shouldn’t come with random formatting changes, especially in unrelated parts of the code.
-5. **Code has appropriate comments.** Code should be commented, or written in a clear “self-documenting” way.
+1.  **Required CI checks pass.** This is a prerequisite for the review, and it is the PR author's responsibility.
+2.  **Simplicity.** If there are too many files, redundant functions, or complex lines of code, suggest a simpler way to do the same thing. In particular, avoid implementing an overly general solution when a simple, small, and pragmatic fix will do.
+3.  **Testing.** Do the tests ensure this code won’t break when other stuff changes.
+4.  **No unnecessary or unrelated changes.** PRs shouldn’t come with random formatting changes, especially in unrelated parts of the code.
+5.  **Code has appropriate comments.** Code should be commented, or written in a clear “self-documenting” way.
 
 ## New contributors
 
