@@ -10,9 +10,11 @@ import Catch from './Catch';
 
 const IS_CLIENT = typeof document !== 'undefined';
 const req = require.context(DIRNAME, true, /\.(js|jsx)$/);
-const {filename, basename = '', disableScroll} = OPTIONS;
+const routesPath = req.keys().find(key => key === './_routes.js');
+const dynamicallyRoutes = routesPath ? req(routesPath).default || req(routesPath) : () => [];
+const {filename, basename = ''} = OPTIONS;
 
-const getComponents = req =>
+const getComponents = async req =>
   req
     .keys()
     .filter(minimatch.filter('!node_modules'))
@@ -24,17 +26,17 @@ const getComponents = req =>
       module: req(key),
       Component: req(key).default || req(key)
     }))
+    .concat(await dynamicallyRoutes())
     .filter(component => typeof component.Component === 'function');
 
-const initialComponents = getComponents(req);
 const DefaultApp = props => props.children;
-
 const Router = IS_CLIENT ? BrowserRouter : StaticRouter;
 const appPath = req.keys().find(key => key === './_app.js');
 const App = appPath ? req(appPath).default || req(appPath) : DefaultApp;
 
-export const getRoutes = async (components = initialComponents) => {
-  const promises = await components.map(async ({key, name, module, Component}) => {
+export const getRoutes = async () => {
+  const components = await getComponents(req);
+  const promises = await components.map(async ({key, name, module, Component, props}) => {
     const exact = name === 'index';
     const dirname = path.dirname(key).replace(/^\./, '');
     const extname = path.extname(key);
@@ -43,10 +45,10 @@ export const getRoutes = async (components = initialComponents) => {
     const initialProps = Component.getInitialProps ? await Component.getInitialProps({path: pathname}) : {};
     const defaultProps = Component.defaultProps;
     const meta = module.frontMatter || {};
-    const props = {...meta, ...initialProps, ...defaultProps};
+    const newProps = {...meta, ...initialProps, ...defaultProps, ...props};
 
     // for dynamic routing
-    pathname = props.path || pathname;
+    pathname = newProps.path || pathname;
 
     if (dirname && name === 'index') {
       name = path.basename(dirname);
@@ -62,7 +64,7 @@ export const getRoutes = async (components = initialComponents) => {
       exact,
       module,
       Component,
-      props
+      props: newProps
     };
   });
   const routes = await Promise.all(promises);
