@@ -1,6 +1,6 @@
 {
   "name": "reunify",
-  "version": "6.1.0",
+  "version": "6.1.1",
   "description": "React with zero configuration",
   "main": "index.js",
   "bin": {
